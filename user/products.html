@@ -3,100 +3,283 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>E-Commerce Website</title>
+		<title>TechSphere - Products</title>
+		<script src="https://cdn.tailwindcss.com"></script>
 		<link
-			href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
 			rel="stylesheet"
 		/>
+		<style>
+			/* Custom scrollbar and smooth interactions */
+			::-webkit-scrollbar {
+				width: 8px;
+			}
+			::-webkit-scrollbar-track {
+				background: #f1f1f1;
+			}
+			::-webkit-scrollbar-thumb {
+				background: #3b82f6;
+				border-radius: 4px;
+			}
+		</style>
 	</head>
-	<body class="bg-gray-100">
-		<!-- Header -->
-		<header class="bg-white shadow">
+	<body class="bg-white text-gray-900 font-sans">
+		<!-- Navigation (Same as Homepage) -->
+		<nav class="fixed w-full top-0 z-50 bg-white shadow-sm">
 			<div
-				class="container mx-auto px-4 py-4 flex justify-between items-center"
+				class="container mx-auto px-6 py-4 flex justify-between items-center"
 			>
-				<h1 class="text-2xl font-bold">E-Commerce</h1>
-				<nav>
-					<ul class="flex space-x-4">
-						<li>
-							<a href="home.html" class="text-gray-600 hover:text-blue-500"
-								>Home</a
-							>
-						</li>
-						<li>
-							<a href="#" class="text-gray-600 hover:text-blue-500">Products</a>
-						</li>
-						<li>
-							<a href="#" class="text-gray-600 hover:text-blue-500">Services</a>
-						</li>
-						<li>
-							<a href="#" class="text-gray-600 hover:text-blue-500">Contact</a>
-						</li>
-					</ul>
-				</nav>
+				<div class="flex items-center space-x-4">
+					<img
+						src="https://via.placeholder.com/40"
+						alt="TechSphere Logo"
+						class="rounded-full"
+					/>
+					<h1 class="text-2xl font-bold text-blue-600">TechSphere</h1>
+				</div>
+
+				<div class="flex items-center space-x-6">
+					<a
+						href="index.html"
+						class="text-gray-700 hover:text-blue-600 transition-colors"
+						>Home</a
+					>
+					<a href="#" class="text-blue-600 border-b-2 border-blue-600"
+						>Products</a
+					>
+					<a
+						href="#"
+						class="text-gray-700 hover:text-blue-600 transition-colors"
+						>Services</a
+					>
+					<div class="relative">
+						<button
+							id="profileToggle"
+							class="text-gray-700 hover:text-blue-600"
+						>
+							<i class="fas fa-user text-xl"></i>
+						</button>
+
+						<div
+							id="profileDropdown"
+							class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg"
+						>
+							<div class="py-1">
+								<a
+									href="#"
+									class="block px-4 py-2 text-gray-700 hover:bg-blue-50"
+								>
+									<i class="fas fa-shopping-cart mr-2"></i>Cart
+								</a>
+								<a
+									href="#"
+									class="block px-4 py-2 text-gray-700 hover:bg-blue-50"
+								>
+									<i class="fas fa-list mr-2"></i>Orders
+								</a>
+								<a
+									href="#"
+									class="block px-4 py-2 text-gray-700 hover:bg-blue-50"
+								>
+									<i class="fas fa-cog mr-2"></i>Settings
+								</a>
+								<a
+									href="#"
+									class="block px-4 py-2 text-gray-700 hover:bg-blue-50"
+								>
+									<i class="fas fa-sign-out-alt mr-2"></i>Logout
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</nav>
+
+		<!-- Products Header -->
+		<header class="pt-24 container mx-auto px-6 mb-12">
+			<div class="flex justify-between items-center">
+				<h1 class="text-4xl font-bold text-blue-600">Our Products</h1>
+				<div class="flex items-center space-x-4">
+					<!-- Category Filters -->
+					<select class="border border-gray-300 rounded-md px-4 py-2">
+						<option>All Categories</option>
+						<option>CPUs</option>
+						<option>GPUs</option>
+						<option>Motherboards</option>
+						<option>RAM</option>
+					</select>
+					<!-- Search Bar -->
+					<div class="relative">
+						<input
+							type="text"
+							placeholder="Search products..."
+							class="border border-gray-300 rounded-md px-4 py-2 w-64"
+						/>
+						<i class="fas fa-search absolute right-3 top-3 text-gray-400"></i>
+					</div>
+				</div>
 			</div>
 		</header>
 
-		<!-- Main Content -->
-		<main class="container mx-auto px-4 py-8">
-			<h2 class="text-3xl font-bold mb-6">Featured Products</h2>
-			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-				<!-- Product Card 1 -->
-				<div class="bg-white rounded-lg shadow-md overflow-hidden">
-					<img
-						src="https://via.placeholder.com/300"
-						alt="Product 1"
-						class="w-full h-48 object-cover"
-					/>
-					<div class="p-4">
-						<h3 class="text-lg font-semibold">Product 1</h3>
-						<p class="text-gray-600">$29.99</p>
-						<button class="mt-2 bg-blue-500 text-white py-2 px-4 rounded">
-							Add to Cart
+		<!-- Products Grid -->
+		<section class="container mx-auto px-6">
+			<div class="grid grid-cols-4 gap-8">
+				<!-- Product Card Template -->
+				<div
+					class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all group"
+				>
+					<div class="relative overflow-hidden">
+						<img
+							src="https://via.placeholder.com/300"
+							alt="Product"
+							class="w-full h-64 object-cover group-hover:scale-110 transition-transform"
+						/>
+						<button
+							class="absolute top-2 right-2 bg-blue-600 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+						>
+							<i class="fas fa-heart"></i>
 						</button>
 					</div>
-				</div>
-				<!-- Product Card 2 -->
-				<div class="bg-white rounded-lg shadow-md overflow-hidden">
-					<img
-						src="https://via.placeholder.com/300"
-						alt="Product 2"
-						class="w-full h-48 object-cover"
-					/>
-					<div class="p-4">
-						<h3 class="text-lg font-semibold">Product 2</h3>
-						<p class="text-gray-600">$39.99</p>
-						<button class="mt-2 bg-blue-500 text-white py-2 px-4 rounded">
-							Add to Cart
-						</button>
+					<div class="p-6">
+						<h3 class="text-xl font-semibold text-gray-800 mb-2">
+							High-Performance CPU
+						</h3>
+						<div class="flex items-center mb-2">
+							<div class="text-yellow-400 mr-2">
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="far fa-star"></i>
+							</div>
+							<span class="text-gray-600 text-sm">(24 Reviews)</span>
+						</div>
+						<div class="flex justify-between items-center">
+							<span class="text-2xl font-bold text-blue-600">$299.99</span>
+							<button
+								class="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition-colors"
+							>
+								Add to Cart
+							</button>
+						</div>
 					</div>
 				</div>
-				<!-- Product Card 3 -->
-				<div class="bg-white rounded-lg shadow-md overflow-hidden">
-					<img
-						src="https://via.placeholder.com/300"
-						alt="Product 3"
-						class="w-full h-48 object-cover"
-					/>
-					<div class="p-4">
-						<h3 class="text-lg font-semibold">Product 3</h3>
-						<p class="text-gray-600">$49.99</p>
-						<button class="mt-2 bg-blue-500 text-white py-2 px-4 rounded">
-							Add to Cart
-						</button>
-					</div>
-				</div>
-				<!-- Add more product cards as needed -->
-			</div>
-		</main>
 
-		<!-- Footer -->
-		<footer class="bg-white shadow mt-8">
-			<div class="container mx-auto px-4 py-4 text-center">
-				<p class="text-gray-600">
-					&copy; 2024 E-Commerce. All rights reserved.
-				</p>
+				<!-- Repeat product cards (12 total) -->
+				<!-- Each card follows the same structure above -->
+				<!-- Variations in image, name, price, etc. -->
 			</div>
-		</footer>
+
+			<!-- Pagination -->
+			<div class="flex justify-center mt-12 space-x-4">
+				<button
+					class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+				>
+					1
+				</button>
+				<button class="text-gray-600 px-4 py-2 rounded-md hover:bg-blue-50">
+					2
+				</button>
+				<button class="text-gray-600 px-4 py-2 rounded-md hover:bg-blue-50">
+					3
+				</button>
+				<button class="text-gray-600 px-4 py-2 rounded-md hover:bg-blue-50">
+					Next <i class="fas fa-chevron-right ml-2"></i>
+				</button>
+			</div>
+		</section>
+
+		<!-- Quick View Modal (Hidden by default) -->
+		<div
+			id="quickViewModal"
+			class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 items-center justify-center"
+		>
+			<div class="bg-white rounded-xl w-3/4 max-w-4xl p-8 relative">
+				<button
+					id="closeModal"
+					class="absolute top-4 right-4 text-gray-600 hover:text-gray-900"
+				>
+					<i class="fas fa-times text-2xl"></i>
+				</button>
+				<h2 class="text-3xl font-bold text-blue-600 mb-4">Product Details</h2>
+				<div class="flex">
+					<img
+						src="https://via.placeholder.com/300"
+						alt="Product"
+						class="w-1/2 h-auto rounded-lg shadow-lg"
+					/>
+					<div class="ml-6">
+						<h3 class="text-2xl font-semibold text-gray-800 mb-2">
+							High-Performance CPU
+						</h3>
+						<div class="flex items-center mb-2">
+							<div class="text-yellow-400 mr-2">
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="far fa-star"></i>
+							</div>
+							<span class="text-gray-600 text-sm">(24 Reviews)</span>
+						</div>
+						<p class="text-gray-600 mb-4">
+							This high-performance CPU is designed for gamers and professionals
+							alike, offering unparalleled speed and efficiency.
+						</p>
+						<span class="text-2xl font-bold text-blue-600 mb-4">$299.99</span>
+						<button
+							class="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition-colors"
+						>
+							Add to Cart
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			// Toggle profile dropdown
+			document
+				.getElementById("profileToggle")
+				.addEventListener("click", function () {
+					const dropdown = document.getElementById("profileDropdown");
+					dropdown.classList.toggle("hidden");
+				});
+
+			// Close dropdown if clicked outside
+			window.addEventListener("click", function (event) {
+				const dropdown = document.getElementById("profileDropdown");
+				if (!event.target.closest("#profileToggle")) {
+					dropdown.classList.add("hidden");
+				}
+			});
+
+			// Open quick view modal
+			const productCards = document.querySelectorAll(".grid .bg-white");
+			productCards.forEach((card) => {
+				card.addEventListener("click", function () {
+					document.getElementById("quickViewModal").classList.remove("hidden");
+				});
+			});
+
+			// Close quick view modal
+			document
+				.getElementById("closeModal")
+				.addEventListener("click", function () {
+					document.getElementById("quickViewModal").classList.add("hidden");
+				});
+
+			// Close modal if clicked outside
+			window.addEventListener("click", function (event) {
+				const modal = document.getElementById("quickViewModal");
+				if (
+					modal.classList.contains("hidden") === false &&
+					!event.target.closest(".bg-white")
+				) {
+					modal.classList.add("hidden");
+				}
+			});
+		</script>
 	</body>
 </html>
