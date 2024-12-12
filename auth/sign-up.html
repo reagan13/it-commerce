@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Sign Up</title>
+		<link rel="stylesheet" href="../design2.css" />
+		<script>
+			function redirectToParent() {
+				window.location.href = "../";
+			}
+		</script>
+	</head>
+	<body>
+		<div class="signupcontent-wrapper">
+			<header class="Header">
+				<nav class="Navigations">
+					<div class="Logo">
+						<img src="../PICTURES/Logo.png" alt="Logo" class="logo-img" />
+						<h2><a href="../index.html">IT Services</a></h2>
+					</div>
+					<ul class="Header-Links">
+						<li><a href="../index.html">Home</a></li>
+						<li><a href="../about-us.html">About Us</a></li>
+						<li><a href="../services.html">Services</a></li>
+						<li><a href="../contact-us.html">Contact Us</a></li>
+					</ul>
+				</nav>
+			</header>
+
+			<div class="whole-sign-up">
+				<form class="Sign-Up">
+					<p class="signuptitle">Register</p>
+					<p class="signup-message">
+						Signup now and get full access to our app.
+					</p>
+					<div class="signupflex">
+						<label>
+							<input required placeholder="" type="text" class="signupinput" />
+							<span>Firstname</span>
+						</label>
+						<label>
+							<input required placeholder="" type="text" class="signupinput" />
+							<span>Lastname</span>
+						</label>
+					</div>
+					<label>
+						<input required placeholder="" type="email" class="signupinput" />
+						<span>Email</span>
+					</label>
+					<label>
+						<input
+							required
+							placeholder=""
+							type="password"
+							class="signupinput"
+						/>
+						<span>Password</span>
+					</label>
+					<label>
+						<input
+							required
+							placeholder=""
+							type="password"
+							class="signupinput"
+						/>
+						<span>Confirm password</span>
+					</label>
+					<button class="signupsubmit">Submit</button>
+					<p class="signinup">
+						Already have an account? <a href="sign-in.html">Signin</a>
+					</p>
+				</form>
+			</div>
+
+			<div class="signupbottom-details">
+				<div class="signupbottom_text">
+					<span class="signupcopyright_text"
+						>&#169; <a href="#">IT Services.</a> All rights reserved 2024</span
+					>
+					<span class="signuppolicy_terms">
+						<a href="#">Terms & Conditions</a>
+					</span>
+				</div>
+			</div>
+		</div>
+		<script src="js/signup.js"></script>
+	</body>
+</html>
