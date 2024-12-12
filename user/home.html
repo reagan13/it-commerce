@@ -3,157 +3,381 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Home - E-Commerce</title>
+		<title>TechSphere - IT Solutions</title>
+		<script src="https://cdn.tailwindcss.com"></script>
 		<link
-			href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
 			rel="stylesheet"
 		/>
-		<script>
-			function toggleDropdown() {
-				const dropdown = document.getElementById("account-dropdown");
-				dropdown.classList.toggle("hidden");
-			}
-		</script>
 	</head>
-	<body class="bg-gray-100">
-		<!-- Header -->
-		<header class="bg-white shadow">
+	<body class="bg-white text-gray-900 font-sans">
+		<!-- Mobile Navigation Menu -->
+		<div
+			id="mobileMenu"
+			class="sticky fixed top-0 inset-0 bg-white z-60 hidden"
+		>
+			<div class="flex justify-between p-6">
+				<div class="flex items-center space-x-4">
+					<img
+						src="https://via.placeholder.com/40"
+						alt="TechSphere Logo"
+						class="rounded-full"
+					/>
+					<h1 class="text-2xl font-bold text-blue-600">TechSphere</h1>
+				</div>
+				<button id="closeMobileMenu" class="text-2xl">
+					<i class="fas fa-times"></i>
+				</button>
+			</div>
+			<nav class="flex flex-col space-y-4 p-6">
+				<a href="home.html" class="text-xl">Home</a>
+				<a href="products.html" class="text-xl">Products</a>
+				<a href="services.html" class="text-xl">Services</a>
+				<div class="border-t pt-4">
+					<a href="cart.html" class="block py-2">Cart</a>
+					<a href="order.html" class="block py-2">Orders</a>
+					<a href="#" class="block py-2">Settings</a>
+					<a href="#" class="block py-2">Logout</a>
+				</div>
+			</nav>
+		</div>
+
+		<!-- Navigation -->
+		<nav
+			class="sticky w-full top-0 fixed z-50 bg-white shadow-sm border border-black"
+		>
 			<div
-				class="container mx-auto px-4 py-4 flex justify-between items-center"
+				class="container mx-auto px-6 py-4 flex justify-between items-center"
 			>
-				<h1 class="text-2xl font-bold">E-Commerce</h1>
-				<div class="relative">
-					<button
-						onclick="toggleDropdown()"
-						class="flex items-center text-gray-600 hover:text-blue-500"
+				<div class="flex items-center space-x-4">
+					<img
+						src="https://via.placeholder.com/40"
+						alt="TechSphere Logo"
+						class="rounded-full"
+					/>
+					<h1 class="text-2xl font-bold text-blue-600">TechSphere</h1>
+				</div>
+
+				<!-- Desktop Navigation -->
+				<div class="hidden md:flex items-center space-x-6">
+					<a href="#" class="text-gray-700 hover:text-blue-600">Home</a>
+					<a href="products.html" class="text-gray-700 hover:text-blue-600"
+						>Products</a
 					>
-						My Account
-						<svg
-							class="w-5 h-5 ml-1"
-							fill="none"
-							stroke="currentColor"
-							viewBox="0 0 24 24"
-							xmlns="http://www.w3.org/2000/svg"
+					<a href="services.html" class="text-gray-700 hover:text-blue-600"
+						>Services</a
+					>
+					<div class="relative">
+						<button
+							id="profileToggle"
+							class="text-gray-700 hover:text-blue-600"
 						>
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M19 9l-7 7-7-7"
-							></path>
-						</svg>
-					</button>
-					<div
-						id="account-dropdown"
-						class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden"
-					>
-						<ul class="py-1">
-							<li>
+							<i class="fas fa-user text-xl"></i>
+						</button>
+						<div
+							id="profileDropdown"
+							class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg"
+						>
+							<div class="py-1">
 								<a
-									href="user/cart.html"
-									class="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-									>Cart</a
+									href="cart.html"
+									class="block px-4 py-2 text-gray-700 hover:bg-blue-50"
 								>
-							</li>
-							<li>
+									<i class="fas fa-shopping-cart mr-2"></i>Cart
+								</a>
 								<a
-									href="user/orders.html"
-									class="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-									>Orders</a
+									href="order.html"
+									class="block px-4 py-2 text-gray-700 hover:bg-blue-50"
 								>
-							</li>
-							<li>
+									<i class="fas fa-list mr-2"></i>Orders
+								</a>
 								<a
-									href="user/settings.html"
-									class="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-									>Settings</a
+									href="#"
+									class="block px-4 py-2 text-gray-700 hover:bg-blue-50"
 								>
-							</li>
-						</ul>
+									<i class="fas fa-cog mr-2"></i>Settings
+								</a>
+								<a
+									href="#"
+									class="block px-4 py-2 text-gray-700 hover:bg-blue-50"
+								>
+									<i class="fas fa-sign-out-alt mr-2"></i>Logout
+								</a>
+							</div>
+						</div>
 					</div>
 				</div>
+
+				<!-- Mobile Menu Toggle -->
+				<button id="mobileMenuToggle" class="md:hidden text-2xl">
+					<i class="fas fa-bars"></i>
+				</button>
 			</div>
-		</header>
+		</nav>
 
 		<!-- Hero Section -->
-		<section class="bg-blue-500 text-white py-20">
-			<div class="container mx-auto text-center">
-				<h2 class="text-4xl font-bold">Welcome to Our E-Commerce Store</h2>
-				<p class="mt-4 text-lg">Find the best products at unbeatable prices!</p>
-				<a
-					href="user/products.html"
-					class="mt-6 inline-block bg-white text-blue-500 py-2 px-4 rounded hover:bg-gray-200"
-					>Shop Now</a
+		<section class="border-2 border-black px-6 flex items-center pt-10">
+			<div
+				class="w-full flex flex-col-reverse lg:flex-row items-center border-2 border-black"
+			>
+				<div
+					class="w-full lg:w-1/2 md:pr-12 text-center md:text-left space-y-10 border border-black lg:pt-0 pt-10"
 				>
+					<h2
+						class="text-3xl md:text-5xl font-bold text-blue-600 mb-6 leading-tight"
+					>
+						Driving Success Through Smart IT Solutions
+					</h2>
+					<p class="text-lg md:text-xl text-gray-600 mb-8 leading-relaxed">
+						Partnering with you to create innovative, practical, and impactful
+						technology strategies for your business growth.
+					</p>
+					<div class="flex justify-center md:justify-start space-x-4">
+						<a
+							href="products.html"
+							class="bg-blue-600 text-white px-6 md:px-8 py-2 md:py-3 rounded-full hover:bg-blue-700"
+						>
+							Explore Products
+						</a>
+						<a
+							href="services.html"
+							class="border-2 border-blue-600 text-blue-600 px-6 md:px-8 py-2 md:py-3 rounded-full hover:bg-blue-50"
+						>
+							Our Services
+						</a>
+					</div>
+				</div>
+				<div class="w-full lg:w-1/2 mb-8 md:mb-0 flex justify-center">
+					<img
+						src="./assets/astro.png"
+						alt="astronaut"
+						class="rounded-xl shadow-xl w-auto lg:w-full h-[400px] lg:h-[600px]"
+					/>
+				</div>
 			</div>
 		</section>
 
-		<!-- Featured Products -->
-		<main class="container mx-auto px-4 py-8">
-			<h2 class="text-3xl font-bold mb-6">Featured Products</h2>
-			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-				<!-- Product Card 1 -->
-				<div class="bg-white rounded-lg shadow-md overflow-hidden">
+		<!-- Products Section -->
+		<section id="products" class="container mx-auto px-6 py-16">
+			<h2 class="text-4xl font-bold text-center text-blue-600 mb-12">
+				Top Products
+			</h2>
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+				<!-- Product Cards (Responsive grid) -->
+				<div
+					class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md"
+				>
 					<img
-						src="https://via.placeholder.com/300"
-						alt="Product 1"
-						class="w-full h-48 object-cover"
+						src="./assets/gpu.jpg"
+						alt="Product"
+						class="w-full h-64 object-cover"
 					/>
-					<div class="p-4">
-						<h3 class="text-lg font-semibold">Product 1</h3>
-						<p class="text-gray-600">$29.99</p>
-						<a
-							href="user/purchase.html"
-							class="mt-2 bg-blue-500 text-white py-2 px-4 rounded"
-							>View Details</a
-						>
+					<div class="p-6">
+						<h3 class="text-xl font-semibold text-gray-800 mb-2">
+							High-Performance GPU
+						</h3>
+						<p class="text-gray-600 mb-4">
+							Ultimate gaming and rendering capabilities
+						</p>
+						<div class="flex justify-between items-center">
+							<span class="text-2xl font-bold text-blue-600">$599.99</span>
+							<button
+								class="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700"
+							>
+								Add to Cart
+							</button>
+						</div>
 					</div>
 				</div>
-				<!-- Product Card 2 -->
-				<div class="bg-white rounded-lg shadow-md overflow-hidden">
+				<div
+					class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md"
+				>
 					<img
-						src="https://via.placeholder.com/300"
-						alt="Product 2"
-						class="w-full h-48 object-cover"
+						src="./assets/laptop.png"
+						alt="Product"
+						class="w-full h-64 object-cover"
 					/>
-					<div class="p-4">
-						<h3 class="text-lg font-semibold">Product 2</h3>
-						<p class="text-gray-600">$39.99</p>
-						<a
-							href="user/purchase.html"
-							class="mt-2 bg-blue-500 text-white py-2 px-4 rounded"
-							>View Details</a
-						>
+					<div class="p-6">
+						<h3 class="text-xl font-semibold text-gray-800 mb-2">
+							Gaming Laptop
+						</h3>
+						<p class="text-gray-600 mb-4">
+							Powerful performance for gamers and creators
+						</p>
+						<div class="flex justify-between items-center">
+							<span class="text-2xl font-bold text-blue-600">$1,299.99</span>
+							<button
+								class="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700"
+							>
+								Add to Cart
+							</button>
+						</div>
 					</div>
 				</div>
-				<!-- Product Card 3 -->
-				<div class="bg-white rounded-lg shadow-md overflow-hidden">
+				<div
+					class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md"
+				>
 					<img
-						src="https://via.placeholder.com/300"
-						alt="Product 3"
-						class="w-full h-48 object-cover"
+						src="./assets/headphone.jpg"
+						alt="Product"
+						class="w-full h-64 object-cover"
 					/>
-					<div class="p-4">
-						<h3 class="text-lg font-semibold">Product 3</h3>
-						<p class="text-gray-600">$49.99</p>
-						<a
-							href="user/purchase.html"
-							class="mt-2 bg-blue-500 text-white py-2 px-4 rounded"
-							>View Details</a
-						>
+					<div class="p-6">
+						<h3 class="text-xl font-semibold text-gray-800 mb-2">
+							Wireless Headphones
+						</h3>
+						<p class="text-gray-600 mb-4">
+							Experience immersive sound without the wires
+						</p>
+						<div class="flex justify-between items-center">
+							<span class="text-2xl font-bold text-blue-600">$199.99</span>
+							<button
+								class="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700"
+							>
+								Add to Cart
+							</button>
+						</div>
 					</div>
 				</div>
-				<!-- Add more product cards as needed -->
 			</div>
-		</main>
+		</section>
+
+		<!-- Services Section -->
+		<section id="services" class="bg-blue-50 py-16">
+			<div class="container mx-auto px-6">
+				<h2 class="text-4xl font-bold text-center text-blue-600 mb-12">
+					Our Services
+				</h2>
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+					<div
+						class="bg-white p-6 rounded-xl shadow-md text-center hover:shadow-lg"
+					>
+						<i class="fas fa-tools text-5xl text-blue-600 mb-4"></i>
+						<h3 class="font-bold text-xl mb-2">Computer Repair</h3>
+						<p class="text-gray-600">
+							Expert diagnosis and repair for all computer issues.
+						</p>
+					</div>
+					<div
+						class="bg-white p-6 rounded-xl shadow-md text-center hover:shadow-lg"
+					>
+						<i class="fas fa-network-wired text-5xl text-blue-600 mb-4"></i>
+						<h3 class="font-bold text-xl mb-2">Network Setup</h3>
+						<p class="text-gray-600">
+							Professional network configuration and optimization.
+						</p>
+					</div>
+					<div
+						class="bg-white p-6 rounded-xl shadow-md text-center hover:shadow-lg"
+					>
+						<i class="fas fa-shield-alt text-5xl text-blue-600 mb-4"></i>
+						<h3 class="font-bold text-xl mb-2">Cybersecurity</h3>
+						<p class="text-gray-600">
+							Comprehensive security solutions for businesses.
+						</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Testimonials Section -->
+		<section class="container mx-auto px-6 py-16">
+			<h2 class="text-4xl font-bold text-center text-blue-600 mb-12">
+				What Our Clients Say
+			</h2>
+			<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+				<div class="bg-white p-6 rounded-xl shadow-md">
+					<p class="italic mb-4">
+						"Exceptional service and top-quality parts!"
+					</p>
+					<div class="flex items-center">
+						<img
+							src="./assets/profile-1.jpg"
+							class="rounded-full mr-4 size-20"
+						/>
+						<div>
+							<h4 class="font-bold">John Doe</h4>
+							<p class="text-gray-600">CEO, Tech Innovations</p>
+						</div>
+					</div>
+				</div>
+				<div class="bg-white p-6 rounded-xl shadow-md">
+					<p class="italic mb-4">
+						"Fast and reliable service, highly recommend!"
+					</p>
+					<div class="flex items-center">
+						<img
+							src="./assets/profile-2.jpg"
+							class="rounded-full mr-4 size-20"
+						/>
+						<div>
+							<h4 class="font-bold">Jane Smith</h4>
+							<p class="text-gray-600">Manager, Creative Solutions</p>
+						</div>
+					</div>
+				</div>
+				<div class="bg-white p-6 rounded-xl shadow-md">
+					<p class="italic mb-4">"Great experience from start to finish!"</p>
+					<div class="flex items-center">
+						<img
+							src="./assets/profile-3.jpg"
+							class="rounded-full mr-4 size-20"
+						/>
+						<div>
+							<h4 class="font-bold">Emily Johnson</h4>
+							<p class="text-gray-600">Freelancer</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
 
 		<!-- Footer -->
-		<footer class="bg-white shadow mt-8">
-			<div class="container mx-auto px-4 py-4 text-center">
-				<p class="text-gray-600">
-					&copy; 2024 E-Commerce. All rights reserved.
-				</p>
+		<footer class="bg-gray-800 text-white py-6">
+			<div class="container mx-auto text-center">
+				<p class="mb-2">© 2023 TechSphere. All rights reserved.</p>
+				<div class="flex justify-center space-x-4">
+					<a href="#" class="text-gray-400 hover:text-white"
+						><i class="fab fa-facebook-f"></i
+					></a>
+					<a href="#" class="text-gray-400 hover:text-white"
+						><i class="fab fa-twitter"></i
+					></a>
+					<a href="#" class="text-gray-400 hover:text-white"
+						><i class="fab fa-linkedin-in"></i
+					></a>
+					<a href="#" class="text-gray-400 hover:text-white"
+						><i class="fab fa-instagram"></i
+					></a>
+				</div>
 			</div>
 		</footer>
+
+		<script>
+			const mobileMenuToggle = document.getElementById("mobileMenuToggle");
+			const mobileMenu = document.getElementById("mobileMenu");
+			const closeMobileMenu = document.getElementById("closeMobileMenu");
+
+			mobileMenuToggle.addEventListener("click", () => {
+				mobileMenu.classList.toggle("hidden");
+			});
+
+			closeMobileMenu.addEventListener("click", () => {
+				mobileMenu.classList.add("hidden");
+			});
+
+			const profileToggle = document.getElementById("profileToggle");
+			const profileDropdown = document.getElementById("profileDropdown");
+
+			profileToggle.addEventListener("click", () => {
+				profileDropdown.classList.toggle("hidden");
+			});
+
+			window.addEventListener("click", (event) => {
+				if (!event.target.closest("#profileToggle")) {
+					profileDropdown.classList.add("hidden");
+				}
+			});
+		</script>
 	</body>
 </html>
