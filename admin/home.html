@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>TechSphere - Admin Dashboard</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<link
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+			rel="stylesheet"
+		/>
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	</head>
+	<body class="bg-gray-100 text-gray-900 font-sans">
+		<div class="flex min-h-screen">
+			<!-- Sidebar -->
+			<div
+				class="w-64 bg-blue-600 text-white p-6 space-y-6 fixed left-0 top-0 bottom-0"
+			>
+				<div class="flex items-center space-x-3 mb-10">
+					<img
+						src="https://via.placeholder.com/50"
+						alt="TechSphere Logo"
+						class="rounded-full"
+					/>
+					<h1 class="text-2xl font-bold">TechSphere Admin</h1>
+				</div>
+
+				<nav class="space-y-2">
+					<button
+						class="admin-nav-item w-full text-left px-4 py-3 rounded hover:bg-blue-700 flex items-center active"
+						data-section="dashboard"
+					>
+						<i class="fas fa-chart-pie mr-3"></i>Dashboard
+					</button>
+					<button
+						class="admin-nav-item w-full text-left px-4 py-3 rounded hover:bg-blue-700 flex items-center"
+						data-section="products"
+					>
+						<i class="fas fa-box mr-3"></i>Products
+					</button>
+					<button
+						class="admin-nav-item w-full text-left px-4 py-3 rounded hover:bg-blue-700 flex items-center"
+						data-section="orders"
+					>
+						<i class="fas fa-shopping-cart mr-3"></i>Orders
+					</button>
+					<button
+						class="admin-nav-item w-full text-left px-4 py-3 rounded hover:bg-blue-700 flex items-center"
+						data-section="users"
+					>
+						<i class="fas fa-users mr-3"></i>Users
+					</button>
+					<button
+						class="admin-nav-item w-full text-left px-4 py-3 rounded hover:bg-blue-700 flex items-center"
+						data-section="analytics"
+					>
+						<i class="fas fa-chart-line mr-3"></i>Analytics
+					</button>
+				</nav>
+			</div>
+
+			<!-- Main Content Area -->
+			<div class="ml-64 flex-grow p-8">
+				<!-- Top Header -->
+				<div class="flex justify-between items-center mb-8">
+					<h1 class="text-3xl font-bold text-gray-800" id="pageTitle">
+						Dashboard
+					</h1>
+					<div class="flex items-center space-x-4">
+						<div class="relative">
+							<input
+								type="text"
+								placeholder="Search..."
+								class="border border-gray-300 rounded-full px-4 py-2 w-64"
+							/>
+							<i class="fas fa-search absolute right-4 top-3 text-gray-400"></i>
+						</div>
+						<button
+							class="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700"
+						>
+							<i class="fas fa-bell mr-2"></i>Notifications
+						</button>
+						<div class="relative">
+							<img
+								src="https://via.placeholder.com/40"
+								class="rounded-full cursor-pointer"
+								id="adminProfileToggle"
+							/>
+							<div
+								id="adminProfileDropdown"
+								class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg"
+							>
+								<div class="py-1">
+									<a
+										href="#"
+										class="block px-4 py-2 text-gray-700 hover:bg-blue-50"
+									>
+										<i class="fas fa-user mr-2"></i>Profile
+									</a>
+									<a
+										href="#"
+										class="block px-4 py-2 text-gray-700 hover:bg-blue-50"
+									>
+										<i class="fas fa-cog mr-2"></i>Settings
+									</a>
+									<a
+										href="#"
+										class="block px-4 py-2 text-red-600 hover:bg-red-50"
+									>
+										<i class="fas fa-sign-out-alt mr-2"></i>Logout
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Dashboard Sections -->
+				<div id="dashboardSections">
+					<!-- Dashboard Section -->
+					<section id="dashboard-section" class="active-section">
+						<div class="grid grid-cols-4 gap-6 mb-8">
+							<div class="bg-white p-6 rounded-lg shadow">
+								<div class="flex justify-between items-center">
+									<div>
+										<h3 class="text-gray-500">Total Sales</h3>
+										<p class="text-2xl font-bold">$45,231.89</p>
+									</div>
+									<i class="fas fa-dollar-sign text-green-500 text-2xl"></i>
+								</div>
+							</div>
+							<div class="bg-white p-6 rounded-lg shadow">
+								<div class="flex justify-between items-center">
+									<div>
+										<h3 class="text-gray-500">Total Orders</h3>
+										<p class="text-2xl font-bold">452</p>
+									</div>
+									<i class="fas fa-shopping-cart text-blue-500 text-2xl"></i>
+								</div>
+							</div>
+							<div class="bg-white p-6 rounded-lg shadow">
+								<div class="flex justify-between items-center">
+									<div>
+										<h3 class="text-gray-500">Total Users</h3>
+										<p class="text-2xl font-bold">1,234</p>
+									</div>
+									<i class="fas fa-users text-purple-500 text-2xl"></i>
+								</div>
+							</div>
+							<div class="bg-white p-6 rounded-lg shadow">
+								<div class="flex justify-between items-center">
+									<div>
+										<h3 class="text-gray-500">Active Products</h3>
+										<p class="text-2xl font-bold">89</p>
+									</div>
+									<i class="fas fa-box text-orange-500 text-2xl"></i>
+								</div>
+							</div>
+						</div>
+
+						<!-- Sales Chart -->
+						<div class="grid grid-cols-2 gap-6">
+							<div class="bg-white p-6 rounded-lg shadow">
+								<h3 class="text-xl font-bold mb-4">Sales Overview</h3>
+								<canvas id="salesChart"></canvas>
+							</div>
+							<div class="bg-white p-6 rounded-lg shadow">
+								<h3 class="text-xl font-bold mb-4">Recent Orders</h3>
+								<table class="w-full">
+									<thead>
+										<tr class="bg-gray-100">
+											<th class="p-2 text-left">Order ID</th>
+											<th class="p-2 text-left">Customer</th>
+											<th class="p- 2 text-left">Total</th>
+											<th class="p-2 text-left">Status</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td class="p-2">ORD-2023-001</td>
+											<td class="p-2">John Doe</td>
+											<td class="p-2">$1,599.97</td>
+											<td class="p-2">
+												<span class="text-green-600">Completed</span>
+											</td>
+										</tr>
+										<tr>
+											<td class="p-2">ORD-2023-002</td>
+											<td class="p-2">Jane Smith</td>
+											<td class="p-2">$199.99</td>
+											<td class="p-2">
+												<span class="text-yellow-600">Processing</span>
+											</td>
+										</tr>
+										<tr>
+											<td class="p-2">ORD-2023-003</td>
+											<td class="p-2">Alice Johnson</td>
+											<td class="p-2">$299.98</td>
+											<td class="p-2">
+												<span class="text-red-600">Cancelled</span>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</section>
+
+					<!-- Products Section -->
+					<section id="products-section" class="hidden-section">
+						<h2 class="text-2xl font-bold mb-4">Manage Products</h2>
+						<button class="bg-blue-600 text-white px-4 py-2 rounded mb-4">
+							Add New Product
+						</button>
+						<table class="w-full">
+							<thead>
+								<tr class="bg-gray-100">
+									<th class="p-2 text-left">Product ID</th>
+									<th class="p-2 text-left">Name</th>
+									<th class="p-2 text-left">Price</th>
+									<th class="p-2 text-left">Stock</th>
+									<th class="p-2 text-left">Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td class="p-2">PROD-001</td>
+									<td class="p-2">Gaming Laptop</td>
+									<td class="p-2">$1,299.99</td>
+									<td class="p-2">50</td>
+									<td class="p-2">
+										<button class="text-blue-600 hover:underline">Edit</button>
+										<button class="text-red-600 hover:underline">Delete</button>
+									</td>
+								</tr>
+								<tr>
+									<td class="p-2">PROD-002</td>
+									<td class="p-2">Wireless Router</td>
+									<td class="p-2">$129.99</td>
+									<td class="p-2">150</td>
+									<td class="p-2">
+										<button class="text-blue-600 hover:underline">Edit</button>
+										<button class="text-red-600 hover:underline">Delete</button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</section>
+
+					<!-- Orders Section -->
+					<section id="orders-section" class="hidden-section">
+						<h2 class="text-2xl font-bold mb-4">Manage Orders</h2>
+						<table class="w-full">
+							<thead>
+								<tr class="bg-gray-100">
+									<th class="p-2 text-left">Order ID</th>
+									<th class="p-2 text-left">Customer</th>
+									<th class="p-2 text-left">Total</th>
+									<th class="p-2 text-left">Status</th>
+									<th class="p-2 text-left">Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td class="p-2">ORD-2023-001</td>
+									<td class="p-2">John Doe</td>
+									<td class="p-2">$1,599.97</td>
+									<td class="p-2">
+										<span class="text-green-600">Completed</span>
+									</td>
+									<td class="p-2">
+										<button class="text-blue-600 hover:underline">View</button>
+										<button class="text-red-600 hover:underline">Cancel</button>
+									</td>
+								</tr>
+								<tr>
+									<td class="p-2">ORD -2023-002</td>
+									<td class="p-2">Jane Smith</td>
+									<td class="p-2">$199.99</td>
+									<td class="p-2">
+										<span class="text-yellow-600">Processing</span>
+									</td>
+									<td class="p-2">
+										<button class="text-blue-600 hover:underline">View</button>
+										<button class="text-red-600 hover:underline">Cancel</button>
+									</td>
+								</tr>
+								<tr>
+									<td class="p-2">ORD-2023-003</td>
+									<td class="p-2">Alice Johnson</td>
+									<td class="p-2">$299.98</td>
+									<td class="p-2">
+										<span class="text-red-600">Cancelled</span>
+									</td>
+									<td class="p-2">
+										<button class="text-blue-600 hover:underline">View</button>
+										<button class="text-red-600 hover:underline">Delete</button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</section>
+
+					<!-- Users Section -->
+					<section id="users-section" class="hidden-section">
+						<h2 class="text-2xl font-bold mb-4">Manage Users</h2>
+						<table class="w-full">
+							<thead>
+								<tr class="bg-gray-100">
+									<th class="p-2 text-left">User ID</th>
+									<th class="p-2 text-left">Name</th>
+									<th class="p-2 text-left">Email</th>
+									<th class="p-2 text-left">Role</th>
+									<th class="p-2 text-left">Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td class="p-2">USR-001</td>
+									<td class="p-2">John Doe</td>
+									<td class="p-2">john@example.com</td>
+									<td class="p-2">Admin</td>
+									<td class="p-2">
+										<button class="text-blue-600 hover:underline">Edit</button>
+										<button class="text-red-600 hover:underline">Delete</button>
+									</td>
+								</tr>
+								<tr>
+									<td class="p-2">USR-002</td>
+									<td class="p-2">Jane Smith</td>
+									<td class="p-2">jane@example.com</td>
+									<td class="p-2">User</td>
+									<td class="p-2">
+										<button class="text-blue-600 hover:underline">Edit</button>
+										<button class="text-red-600 hover:underline">Delete</button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</section>
+
+					<!-- Analytics Section -->
+					<section id="analytics-section" class="hidden-section">
+						<h2 class="text-2xl font-bold mb-4">Analytics Overview</h2>
+						<canvas id="analyticsChart"></canvas>
+					</section>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			// Chart.js Sales Overview
+			const salesCtx = document.getElementById("salesChart").getContext("2d");
+			const salesChart = new Chart(salesCtx, {
+				type: "line",
+				data: {
+					labels: ["January", "February", "March", "April", "May", "June"],
+					datasets: [
+						{
+							label: "Sales",
+							data: [12000, 19000, 30000, 50000, 40000, 60000],
+							borderColor: "rgba(75, 192, 192, 1)",
+							backgroundColor: "rgba(75, 192, 192, 0.2)",
+							borderWidth: 2,
+						},
+					],
+				},
+				options: {
+					responsive: true,
+					scales: {
+						y: {
+							beginAtZero: true,
+						},
+					},
+				},
+			});
+
+			// Chart.js Analytics Overview
+			const analyticsCtx = document
+				.getElementById("analyticsChart")
+				.getContext("2d");
+			const analyticsChart = new Chart(analyticsCtx, {
+				type: "bar",
+				data: {
+					labels: ["Users", "Orders", "Products"],
+					datasets: [
+						{
+							label: "Counts",
+							data: [1234, 452, 89],
+							backgroundColor: [
+								"rgba(54, 162, 235, 0.2)",
+								"rgba(255, 206, 86, 0.2)",
+								"rgba(75, 192, 192, 0.2)",
+							],
+							borderColor: [
+								"rgba(54, 162, 235, 1)",
+								"rgba(255, 206, 86, 1)",
+								"rgba(75, 192, 192, 1)",
+							],
+							borderWidth: 1,
+						},
+					],
+				},
+				options: {
+					responsive: true,
+					scales: {
+						y: {
+							beginAtZero: true,
+						},
+					},
+				},
+			});
+
+			// Navigation functionality
+			const navItems = document.querySelectorAll(".admin-nav-item");
+			const sections = document.querySelectorAll(".hidden-section");
+
+			navItems.forEach((item) => {
+				item.addEventListener("click", () => {
+					const sectionId = item.getAttribute("data-section");
+					sections.forEach((section) => {
+						section.classList.add("hidden-section");
+						if (section.id === `${sectionId}-section`) {
+							section.classList.remove("hidden-section");
+						}
+					});
+					document.getElementById("pageTitle").innerText = item.innerText;
+				});
+			});
+
+			// Profile dropdown toggle
+			document
+				.getElementById("adminProfileToggle")
+				.addEventListener("click", () => {
+					const dropdown = document.getElementById("adminProfileDropdown");
+					dropdown.classList.toggle("hidden");
+				});
+
+			// Close dropdown when clicking outside
+			window.addEventListener("click", (event) => {
+				const dropdown = document.getElementById("adminProfileDropdown");
+				if (
+					!event.target.matches("#adminProfileToggle") &&
+					!dropdown.contains(event.target)
+				) {
+					dropdown.classList.add("hidden");
+				}
+			});
+		</script>
+	</body>
+</html>
