@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>TechSphere - Order History</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<link
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+			rel="stylesheet"
+		/>
+	</head>
+	<body class="bg-gray-50 text-gray-900 font-sans">
+		<!-- Navigation -->
+		<nav class="fixed w-full top-0 z-50 bg-white shadow-sm">
+			<div
+				class="container mx-auto px-6 py-4 flex justify-between items-center"
+			>
+				<div class="flex items-center space-x-4">
+					<img
+						src="https://via.placeholder.com/40"
+						alt="TechSphere Logo"
+						class="rounded-full"
+					/>
+					<h1 class="text-2xl font-bold text-blue-600">TechSphere</h1>
+				</div>
+
+				<div class="flex items-center space-x-6">
+					<a
+						href="index.html"
+						class="text-gray-700 hover:text-blue-600 transition-colors"
+						>Home</a
+					>
+					<a
+						href="products.html"
+						class="text-gray-700 hover:text-blue-600 transition-colors"
+						>Products</a
+					>
+					<a
+						href="services.html"
+						class="text-gray-700 hover:text-blue-600 transition-colors"
+						>Services</a
+					>
+					<a
+						href="cart.html"
+						class="text-gray-700 hover:text-blue-600 transition-colors"
+						>Cart</a
+					>
+					<a href="#" class="text-blue-600 border-b-2 border-blue-600"
+						>Orders</a
+					>
+
+					<div class="relative">
+						<button
+							id="profileToggle"
+							class="text-gray-700 hover:text-blue-600"
+						>
+							<i class="fas fa-user text-xl"></i>
+						</button>
+
+						<div
+							id="profileDropdown"
+							class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg"
+						>
+							<div class="py-1">
+								<a
+									href="cart.html"
+									class="block px-4 py-2 text-gray-700 hover:bg-blue-50"
+								>
+									<i class="fas fa-shopping-cart mr-2"></i>Cart
+								</a>
+								<a
+									href="#"
+									class="block px-4 py-2 text-gray-700 hover:bg-blue-50"
+								>
+									<i class="fas fa-list mr-2"></i>Orders
+								</a>
+								<a
+									href="#"
+									class="block px-4 py-2 text-gray-700 hover:bg-blue-50"
+								>
+									<i class="fas fa-cog mr-2"></i>Settings
+								</a>
+								<a
+									href="#"
+									class="block px-4 py-2 text-gray-700 hover:bg-blue-50"
+								>
+									<i class="fas fa-sign-out-alt mr-2"></i>Logout
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</nav>
+
+		<!-- Order History Section -->
+		<div class="container mx-auto px-6 pt-24">
+			<div class="flex justify-between items-center mb-8">
+				<h1 class="text-4xl font-bold text-blue-600">Order History</h1>
+				<div class="flex items-center space-x-4">
+					<select
+						id="orderFilter"
+						class="border border-gray-300 rounded-md px-3 py-2"
+					>
+						<option value="all">All Orders</option>
+						<option value="completed">Completed</option>
+						<option value="processing">Processing</option>
+						<option value="cancelled">Cancelled</option>
+					</select>
+					<input
+						type="text"
+						id="searchOrder"
+						placeholder="Search Orders"
+						class="border border-gray-300 rounded-md px-3 py-2 w-64"
+					/>
+				</div>
+			</div>
+
+			<!-- Order List -->
+			<div id="orderListContainer" class="space-y-6">
+				<!-- Orders will be dynamically inserted here -->
+			</div>
+		</div>
+
+		<!-- Order Details Modal -->
+		<div
+			id="orderDetailsModal"
+			class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4"
+		>
+			<div
+				class="bg-white rounded-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto p-8 relative"
+			>
+				<button
+					id="closeOrderModal"
+					class="absolute top-4 right-4 text-gray-600 hover:text-gray-900"
+				>
+					<i class="fas fa-times text-2xl"></i>
+				</button>
+
+				<div id="orderModalContent">
+					<!-- Dynamic order details will be inserted here -->
+				</div>
+			</div>
+		</div>
+
+		<script>
+			// Sample Order Data
+			const orderData = [
+				{
+					id: "ORD-2023-001",
+					date: "2023-06-15",
+					status: "completed",
+					total: 1599.97,
+					items: [
+						{
+							name: "Gaming Laptop",
+							price: 1299.99,
+							quantity: 1,
+							image: "https://via.placeholder.com/100",
+						},
+						{
+							name: "Wireless Router",
+							price: 129.99,
+							quantity: 1,
+							image: "https://via.placeholder.com/100",
+						},
+					],
+				},
+				{
+					id: "ORD-2023-002",
+					date: "2023-06-20",
+					status: "processing",
+					total: 199.99,
+					items: [
+						{
+							name: "External SSD",
+							price: 199.99,
+							quantity: 1,
+							image: "https://via.placeholder.com/100",
+						},
+					],
+				},
+				{
+					id: "ORD-2023-003",
+					date: "2023-06-10",
+					status: "cancelled",
+					total: 299.98,
+					items: [
+						{
+							name: "Bluetooth Headphones",
+							price: 149.99,
+							quantity: 2,
+							image: "https://via.placeholder.com/100",
+						},
+					],
+				},
+			];
+
+			class OrderManager {
+				constructor() {
+					this.orderListContainer =
+						document.getElementById("orderListContainer");
+					this.orderDetailsModal = document.getElementById("orderDetailsModal");
+					this.orderModalContent = document.getElementById("orderModalContent");
+					this.orderFilter = document.getElementById("orderFilter");
+					this.searchOrder = document.getElementById("searchOrder");
+
+					this.initEventListeners();
+					this.renderOrders();
+				}
+
+				initEventListeners() {
+					// Filter orders
+					this.orderFilter.addEventListener("change", () =>
+						this.renderOrders()
+					);
+
+					// Search orders
+					this.searchOrder.addEventListener("input", () => this.renderOrders());
+
+					// Close modal
+					document
+						.getElementById("closeOrderModal")
+						.addEventListener("click", () => {
+							this.orderDetailsModal.classList.add("hidden");
+						});
+
+					// Close modal when clicking outside
+					this.orderDetailsModal.addEventListener("click", (e) => {
+						if (e.target === this.orderDetailsModal) {
+							this.orderDetailsModal.classList.add("hidden");
+						}
+					});
+				}
+
+				renderOrders() {
+					const filterValue = this.orderFilter.value;
+					const searchValue = this.searchOrder.value.toLowerCase();
+					this.orderListContainer.innerHTML = "";
+
+					const filteredOrders = orderData.filter((order) => {
+						const matchesStatus =
+							filterValue === "all" || order.status === filterValue;
+						const matchesSearch = order.id.toLowerCase().includes(searchValue);
+						return matchesStatus && matchesSearch;
+					});
+
+					filteredOrders.forEach((order) => this.renderOrderItem(order));
+				}
+
+				renderOrderItem(order) {
+					const orderItemElement = document.createElement("div");
+					orderItemElement.classList.add(
+						"bg-white",
+						"border",
+						"border-gray-200",
+						"rounded-xl",
+						"p-6",
+						"flex",
+						"justify-between",
+						"items-center"
+					);
+					orderItemElement.innerHTML = `
+                    <div>
+                        <h2 class="text-xl font-bold">Order ID: ${order.id}</h2>
+                        <p class="text-gray-600">Date: ${order.date}</p>
+                        <p class="text-gray-600">Status: <span class="${this.getStatusClass(
+													order.status
+												)}">${order.status}</span></p>
+                    </div>
+                    <div>
+                        <span class="text-lg font-bold">$${order.total.toFixed(
+													2
+												)}</span>
+                        <button class="mt-2 text-blue-600 hover:underline view-details" data-id="${
+													order.id
+												}">View Details</button>
+                    </div>
+                `;
+					this.orderListContainer.appendChild(orderItemElement);
+
+					// Add event listener for view details button
+					orderItemElement
+						.querySelector(".view-details")
+						.addEventListener("click", () => {
+							this.showOrderDetails(order);
+						});
+				}
+
+				getStatusClass(status) {
+					switch (status) {
+						case "completed":
+							return "text-green-600";
+						case "processing":
+							return "text-yellow-600";
+						case "cancelled":
+							return "text-red-600";
+						default:
+							return "";
+					}
+				}
+
+				showOrderDetails(order) {
+					this.orderModalContent.innerHTML = `
+                    <h2 class="text-2xl font-bold mb-4">Order Details: ${
+											order.id
+										}</h2>
+                    <p class="text-gray-600 mb-2">Date: ${order.date}</p>
+                    <p class="text-gray-600 mb-4">Status: <span class="${this.getStatusClass(
+											order.status
+										)}">${order.status}</span></p>
+                    <h3 class="text-xl font-bold mb-2">Items:</h3>
+                    <div class="space-y-4">
+                        ${order.items
+													.map(
+														(item) => `
+                            <div class="flex items-center space-x-4">
+                                <img src="${
+																	item.image
+																}" class="w-16 h-16 object-cover rounded-lg" />
+                                <div>
+                                    <h4 class="text-lg font-bold">${
+																			item.name
+																		}</h4>
+                                    <p class="text-gray-600">Price: $${item.price.toFixed(
+																			2
+																		)} x ${item.quantity}</p>
+                                </div>
+                            </div>
+                        `
+													)
+													.join("")}
+                    </div>
+                    <h3 class="text-xl font-bold mt-4">Total: $${order.total.toFixed(
+											2
+										)}</h3>
+                `;
+					this.orderDetailsModal.classList.remove("hidden");
+				}
+			}
+
+			// Initialize Order Manager
+			new OrderManager();
+		</script>
+	</body>
+</html>
