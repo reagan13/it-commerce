@@ -4,8 +4,9 @@ const app = express();
 const PORT = 3000;
 const bcrypt = require("bcryptjs");
 const bodyParser = require("body-parser");
-
 const cors = require("cors");
+
+app.use(express.json()); // Add this to parse JSON
 
 // Completely open CORS configuration
 const corsOptions = {
@@ -18,6 +19,7 @@ const corsOptions = {
 
 // Apply CORS middleware
 app.use(cors(corsOptions));
+app.use(cors());
 
 // Parse incoming JSON requests
 app.use(bodyParser.json());
@@ -156,8 +158,6 @@ app.post("/api/signin", (req, res) => {
 // get all products
 app.get("/api/products", (req, res) => {
 	const query = "SELECT * FROM products";
-
-	console.log("Fetching products...");
 
 	connection.query(query, (err, results) => {
 		if (err) {
@@ -311,16 +311,6 @@ app.get("/api/cart/:userId", (req, res) => {
 	});
 });
 
-// Catch-all route handler to help diagnose routing issues
-app.use((req, res) => {
-	console.log(`Received ${req.method} request to ${req.path}`);
-	res.status(404).json({
-		error: "Not Found",
-		path: req.path,
-		method: req.method,
-	});
-});
-
 // Cart Update Endpoint
 app.post("/api/cart/update", (req, res) => {
 	const { userId, productId, quantity } = req.body;
@@ -373,9 +363,10 @@ app.post("/api/cart/update", (req, res) => {
 	}
 });
 
-// Remove Item from Cart Endpoint
-app.post("/api/cart/remove", (req, res) => {
+// Ensure the route matches exactly
+app.delete("/api/cart/remove", (req, res) => {
 	const { userId, productId } = req.body;
+	console.log("Removing item from cart", userId, productId);
 
 	if (!userId || !productId) {
 		return res
@@ -392,7 +383,17 @@ app.post("/api/cart/remove", (req, res) => {
 			});
 		}
 
-		res.status(200).json({ message: "Item removed from cart successfully" });
+		// Check if any rows were actually deleted
+		if (result.affectedRows === 0) {
+			return res.status(404).json({
+				error: "Item not found in cart",
+			});
+		}
+
+		res.status(200).json({
+			message: "Item removed from cart successfully",
+			deletedRows: result.affectedRows,
+		});
 	});
 });
 
