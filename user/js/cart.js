@@ -589,7 +589,7 @@ class CartManager {
 
 			// Redirect to order confirmation page
 			setTimeout(() => {
-				window.location.href = `/order-confirmation.html?orderId=${orderResult.orderId}`;
+				window.location.href = `./order-confirmation.html?orderId=${orderResult.orderId}`;
 			}, 2000);
 		} catch (error) {
 			console.error("Checkout Error:", error);
@@ -867,7 +867,8 @@ class CartManager {
 
 // Initialize cart manager
 document.addEventListener("DOMContentLoaded", () => {
-	const checkoutButton = document.querySelector("button");
+	const checkoutButton = document.getElementById("checkoutButton");
+
 	const cartManager = new CartManager();
 	cartManager.renderCart();
 	if (checkoutButton) {

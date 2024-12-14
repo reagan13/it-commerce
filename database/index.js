@@ -537,44 +537,163 @@ app.get("/api/orders", (req, res) => {
 		return res.status(400).json({ error: "User ID is required" });
 	}
 
-	const query = `
+	// First, get the orders
+	const ordersQuery = `
         SELECT 
             o.id AS order_id, 
             o.order_date, 
-            o.total_amount,
-            JSON_ARRAYAGG(
-                JSON_OBJECT(
-                    'product_id', oi.product_id,
-                    'product_name', p.name,
-                    'quantity', oi.quantity,
-                    'price', oi.price,
-                    'product_image', p.image
-                )
-            ) AS items
+            o.total_amount
         FROM orders o
-        JOIN order_items oi ON o.id = oi.order_id
-        JOIN products p ON oi.product_id = p.id
         WHERE o.user_id = ?
-        GROUP BY o.id, o.order_date, o.total_amount
         ORDER BY o.order_date DESC
     `;
 
-	connection.query(query, [userId], (err, results) => {
+	connection.query(ordersQuery, [userId], (err, orderResults) => {
 		if (err) {
+			console.error("Orders Query Error:", err);
 			return res.status(500).json({
 				error: "Failed to retrieve orders",
 				details: err.message,
 			});
 		}
 
-		// Parse the JSON_ARRAYAGG result
-		const parsedResults = results.map((order) => ({
-			...order,
-			items: JSON.parse(order.items),
-		}));
+		// If no orders found, return empty array
+		if (orderResults.length === 0) {
+			return res.status(200).json([]);
+		}
 
-		res.status(200).json(parsedResults);
+		// Prepare to fetch items for each order
+		const orderIds = orderResults.map((order) => order.order_id);
+
+		// Get order items for all orders in one query
+		const itemsQuery = `
+            SELECT 
+                oi.order_id,
+                oi.product_id,
+                p.name,
+                oi.price,
+                oi.quantity,
+                p.image
+            FROM order_items oi
+            JOIN products p ON oi.product_id = p.id
+            WHERE oi.order_id IN (?)
+        `;
+
+		connection.query(itemsQuery, [orderIds], (itemErr, itemResults) => {
+			if (itemErr) {
+				console.error("Items Query Error:", itemErr);
+				return res.status(500).json({
+					error: "Failed to retrieve order items",
+					details: itemErr.message,
+				});
+			}
+
+			// Group items by order
+			const orderItemsMap = itemResults.reduce((acc, item) => {
+				if (!acc[item.order_id]) {
+					acc[item.order_id] = [];
+				}
+				acc[item.order_id].push({
+					product_id: item.product_id,
+					name: item.name,
+					price: parseFloat(item.price),
+					quantity: item.quantity,
+					image: item.image,
+				});
+				return acc;
+			}, {});
+
+			// Combine orders with their items
+			const processedOrders = orderResults.map((order) => ({
+				id: `ORD-${order.order_id}`,
+				date: new Date(order.order_date).toISOString().split("T")[0],
+				total: parseFloat(order.total_amount),
+				items: orderItemsMap[order.order_id] || [],
+			}));
+
+			res.status(200).json(processedOrders);
+		});
 	});
+});
+
+// Single Order Details Endpoint
+app.get("/api/orders/:orderId", (req, res) => {
+	const { orderId } = req.params;
+	const { userId } = req.query;
+
+	if (!userId || !orderId) {
+		return res.status(400).json({ error: "User ID and Order ID are required" });
+	}
+
+	// Extract numeric ID from formatted order ID
+	const numericOrderId = orderId.replace("ORD-", "");
+
+	// First, get the order details
+	const orderQuery = `
+        SELECT 
+            o.id AS order_id, 
+            o.order_date, 
+            o.total_amount
+        FROM orders o
+        WHERE o.id = ? AND o.user_id = ?
+    `;
+
+	connection.query(
+		orderQuery,
+		[numericOrderId, userId],
+		(err, orderResults) => {
+			if (err) {
+				console.error("Order Query Error:", err);
+				return res.status(500).json({
+					error: "Failed to retrieve order details",
+					details: err.message,
+				});
+			}
+
+			if (orderResults.length === 0) {
+				return res.status(404).json({ error: "Order not found" });
+			}
+
+			// Get order items
+			const itemsQuery = `
+            SELECT 
+                oi.product_id,
+                p.name,
+                oi.price,
+                oi.quantity,
+                p.image
+            FROM order_items oi
+            JOIN products p ON oi.product_id = p.id
+            WHERE oi.order_id = ?
+        `;
+
+			connection.query(itemsQuery, [numericOrderId], (itemErr, itemResults) => {
+				if (itemErr) {
+					console.error("Items Query Error:", itemErr);
+					return res.status(500).json({
+						error: "Failed to retrieve order items",
+						details: itemErr.message,
+					});
+				}
+
+				const order = orderResults[0];
+				const processedOrder = {
+					id: `ORD-${order.order_id}`,
+					date: new Date(order.order_date).toISOString().split("T")[0],
+					total: parseFloat(order.total_amount),
+					items: itemResults.map((item) => ({
+						product_id: item.product_id,
+						name: item.name,
+						price: parseFloat(item.price),
+						quantity: item.quantity,
+						image: item.image,
+					})),
+				};
+
+				res.status(200).json(processedOrder);
+			});
+		}
+	);
 });
 
 app.put("/api/cart/update-quantity", (req, res) => {
@@ -625,4 +744,165 @@ app.put("/api/cart/update-quantity", (req, res) => {
 			});
 		}
 	);
+});
+
+// Get Single Order Details
+
+app.get("/api/orders/:orderId", (req, res) => {
+	const { orderId } = req.params;
+	const { userId } = req.query;
+
+	console.log("Received Order Request:", { orderId, userId });
+
+	if (!userId || !orderId) {
+		return res.status(400).json({ error: "User ID and Order ID are required" });
+	}
+
+	// Basic SQL query to fetch order and associated items
+	const query = `
+        SELECT 
+            o.id AS order_id, 
+            o.order_date, 
+            o.total_amount,
+            oi.product_id,
+            p.name AS product_name,
+            oi.quantity,
+            oi.price,
+            p.image AS product_image
+        FROM orders o
+        JOIN order_items oi ON o.id = oi.order_id
+        JOIN products p ON oi.product_id = p.id
+        WHERE o.id = ? AND o.user_id = ?
+    `;
+
+	connection.query(query, [orderId, userId], (err, results) => {
+		if (err) {
+			console.error("Database Error:", err);
+			return res.status(500).json({
+				error: "Failed to retrieve order details",
+				details: err.message,
+				stack: err.stack,
+			});
+		}
+
+		if (results.length === 0) {
+			console.warn(`No order found for ID ${orderId} and User ${userId}`);
+			return res.status(404).json({
+				error: "Order not found",
+				orderId,
+				userId,
+			});
+		}
+
+		try {
+			// Constructing order details and items directly
+			const order = results[0];
+			const orderDetails = {
+				order_id: order.order_id,
+				order_date: new Date(order.order_date).toISOString(),
+				total_amount: order.total_amount,
+				items: results.map((item) => ({
+					product_id: item.product_id,
+					product_name: item.product_name,
+					quantity: item.quantity,
+					price: item.price,
+					product_image: item.product_image,
+				})),
+			};
+
+			res.status(200).json(orderDetails);
+		} catch (parseError) {
+			console.error("Parsing Error:", parseError);
+			res.status(500).json({
+				error: "Failed to parse order details",
+				details: parseError.message,
+			});
+		}
+	});
+});
+
+app.get("/api/orders", (req, res) => {
+	const { userId } = req.query;
+
+	if (!userId) {
+		return res.status(400).json({ error: "User ID is required" });
+	}
+
+	// First, get the orders
+	const ordersQuery = `
+        SELECT 
+            o.id AS order_id, 
+            o.order_date, 
+            o.total_amount
+        FROM orders o
+        WHERE o.user_id = ?
+        ORDER BY o.order_date DESC
+    `;
+
+	connection.query(ordersQuery, [userId], (err, orderResults) => {
+		if (err) {
+			console.error("Database Error:", err);
+			return res.status(500).json({
+				error: "Failed to retrieve orders",
+				details: err.message,
+			});
+		}
+
+		// If no orders found, return empty array
+		if (orderResults.length === 0) {
+			return res.status(200).json([]);
+		}
+
+		// Prepare to fetch items for each order
+		const orderIds = orderResults.map((order) => order.order_id);
+
+		// Get order items for all orders in one query
+		const itemsQuery = `
+            SELECT 
+                oi.order_id,
+                oi.product_id,
+                p.name,
+                oi.price,
+                oi.quantity,
+                p.image
+            FROM order_items oi
+            JOIN products p ON oi.product_id = p.id
+            WHERE oi.order_id IN (?)
+        `;
+
+		connection.query(itemsQuery, [orderIds], (itemErr, itemResults) => {
+			if (itemErr) {
+				console.error("Items Fetch Error:", itemErr);
+				return res.status(500).json({
+					error: "Failed to retrieve order items",
+					details: itemErr.message,
+				});
+			}
+
+			// Group items by order
+			const orderItemsMap = itemResults.reduce((acc, item) => {
+				if (!acc[item.order_id]) {
+					acc[item.order_id] = [];
+				}
+				acc[item.order_id].push({
+					product_id: item.product_id,
+					name: item.name,
+					price: parseFloat(item.price),
+					quantity: item.quantity,
+					image: item.image,
+				});
+				return acc;
+			}, {});
+
+			// Combine orders with their items
+			const processedOrders = orderResults.map((order) => ({
+				id: `ORD-${order.order_id}`,
+				date: new Date(order.order_date).toISOString().split("T")[0],
+				total: parseFloat(order.total_amount),
+				items: orderItemsMap[order.order_id] || [],
+			}));
+
+			res.status(200).json(processedOrders);
+		});
+	});
 });

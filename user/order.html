@@ -11,87 +11,9 @@
 		/>
 	</head>
 	<body class="bg-gray-50 text-gray-900 font-sans">
-		<!-- Navigation -->
+		<!-- Navigation (keep your existing navigation) -->
 		<nav class="fixed w-full top-0 z-50 bg-white shadow-sm">
-			<div
-				class="container mx-auto px-6 py-4 flex justify-between items-center"
-			>
-				<div class="flex items-center space-x-4">
-					<img
-						src="https://via.placeholder.com/40"
-						alt="TechSphere Logo"
-						class="rounded-full"
-					/>
-					<h1 class="text-2xl font-bold text-blue-600">TechSphere</h1>
-				</div>
-
-				<div class="flex items-center space-x-6">
-					<a
-						href="index.html"
-						class="text-gray-700 hover:text-blue-600 transition-colors"
-						>Home</a
-					>
-					<a
-						href="products.html"
-						class="text-gray-700 hover:text-blue-600 transition-colors"
-						>Products</a
-					>
-					<a
-						href="services.html"
-						class="text-gray-700 hover:text-blue-600 transition-colors"
-						>Services</a
-					>
-					<a
-						href="cart.html"
-						class="text-gray-700 hover:text-blue-600 transition-colors"
-						>Cart</a
-					>
-					<a href="#" class="text-blue-600 border-b-2 border-blue-600"
-						>Orders</a
-					>
-
-					<div class="relative">
-						<button
-							id="profileToggle"
-							class="text-gray-700 hover:text-blue-600"
-						>
-							<i class="fas fa-user text-xl"></i>
-						</button>
-
-						<div
-							id="profileDropdown"
-							class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg"
-						>
-							<div class="py-1">
-								<a
-									href="cart.html"
-									class="block px-4 py-2 text-gray-700 hover:bg-blue-50"
-								>
-									<i class="fas fa-shopping-cart mr-2"></i>Cart
-								</a>
-								<a
-									href="#"
-									class="block px-4 py-2 text-gray-700 hover:bg-blue-50"
-								>
-									<i class="fas fa-list mr-2"></i>Orders
-								</a>
-								<a
-									href="#"
-									class="block px-4 py-2 text-gray-700 hover:bg-blue-50"
-								>
-									<i class="fas fa-cog mr-2"></i>Settings
-								</a>
-								<a
-									href="#"
-									class="block px-4 py-2 text-gray-700 hover:bg-blue-50"
-								>
-									<i class="fas fa-sign-out-alt mr-2"></i>Logout
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+			<!-- Your existing navigation HTML -->
 		</nav>
 
 		<!-- Order History Section -->
@@ -108,9 +30,34 @@
 				</div>
 			</div>
 
+			<!-- Loading Indicator -->
+			<div
+				id="loadingIndicator"
+				class="flex justify-center items-center py-12 hidden"
+			>
+				<div
+					class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"
+				></div>
+			</div>
+
 			<!-- Order List -->
 			<div id="orderListContainer" class="space-y-6">
 				<!-- Orders will be dynamically inserted here -->
+			</div>
+
+			<!-- No Orders Placeholder -->
+			<div id="noOrdersPlaceholder" class="hidden text-center py-12">
+				<i class="fas fa-box-open text-6xl text-gray-300 mb-4"></i>
+				<h2 class="text-2xl font-semibold text-gray-600">No Orders Yet</h2>
+				<p class="text-gray-500 mt-2">
+					Start shopping to see your order history.
+				</p>
+				<a
+					href="products.html"
+					class="mt-4 inline-block bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700"
+				>
+					Shop Now
+				</a>
 			</div>
 		</div>
 
@@ -136,55 +83,6 @@
 		</div>
 
 		<script>
-			// Sample Order Data
-			const orderData = [
-				{
-					id: "ORD-2023-001",
-					date: "2023-06-15",
-					total: 1599.97,
-					items: [
-						{
-							name: "Gaming Laptop",
-							price: 1299.99,
-							quantity: 1,
-							image: "https://via.placeholder.com/100",
-						},
-						{
-							name: "Wireless Router",
-							price: 129.99,
-							quantity: 1,
-							image: "https://via.placeholder.com/100",
-						},
-					],
-				},
-				{
-					id: "ORD-2023-002",
-					date: "2023-06-20",
-					total: 199.99,
-					items: [
-						{
-							name: "External SSD",
-							price: 199.99,
-							quantity: 1,
-							image: "https://via.placeholder.com/100",
-						},
-					],
-				},
-				{
-					id: "ORD-2023-003",
-					date: "2023-06-10",
-					total: 299.98,
-					items: [
-						{
-							name: "Bluetooth Headphones",
-							price: 149.99,
-							quantity: 2,
-							image: "https://via.placeholder.com/100",
-						},
-					],
-				},
-			];
-
 			class OrderManager {
 				constructor() {
 					this.orderListContainer =
@@ -192,9 +90,14 @@
 					this.orderDetailsModal = document.getElementById("orderDetailsModal");
 					this.orderModalContent = document.getElementById("orderModalContent");
 					this.searchOrder = document.getElementById("searchOrder");
+					this.loadingIndicator = document.getElementById("loadingIndicator");
+					this.noOrdersPlaceholder = document.getElementById(
+						"noOrdersPlaceholder"
+					);
 
+					this.orders = []; // Will store fetched orders
 					this.initEventListeners();
-					this.renderOrders();
+					this.fetchOrders();
 				}
 
 				initEventListeners() {
@@ -216,13 +119,88 @@
 					});
 				}
 
+				async fetchOrders() {
+					// Show loading indicator
+					this.loadingIndicator.classList.remove("hidden");
+					this.orderListContainer.innerHTML = "";
+					this.noOrdersPlaceholder.classList.add("hidden");
+
+					try {
+						const userId = localStorage.getItem("userId");
+						if (!userId) {
+							throw new Error("User not logged in");
+						}
+
+						// Update this line to use full backend URL
+						const response = await fetch(
+							`http://localhost:3000/api/orders?userId=${userId}`,
+							{
+								method: "GET",
+								headers: {
+									"Content-Type": "application/json",
+								},
+							}
+						);
+
+						if (!response.ok) {
+							// Log the error response
+							const errorBody = await response.text();
+							console.error("Error response:", errorBody);
+							throw new Error("Failed to fetch orders");
+						}
+
+						this.orders = await response.json();
+
+						// Hide loading indicator
+						this.loadingIndicator.classList.add("hidden");
+
+						this.renderOrders();
+					} catch (error) {
+						console.error("Error fetching orders:", error);
+
+						// Hide loading indicator
+						this.loadingIndicator.classList.add("hidden");
+
+						// Show error message or handle accordingly
+						this.showErrorState(error.message);
+					}
+				}
+				showErrorState(message) {
+					this.orderListContainer.innerHTML = `
+                <div class="text-center py-12 bg-red-50 rounded-lg">
+                    <i class="fas fa-exclamation-triangle text-6xl text-red-500 mb-4"></i>
+                    <h2 class="text-2xl font-semibold text-red-600">Error</h2>
+                    <p class="text-red-500 mt-2">${message}</p>
+                    <button onclick="window.location.reload()" class="mt-4 bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700">
+                        Try Again
+                    </button>
+                </div>
+            `;
+				}
+
 				renderOrders() {
 					const searchValue = this.searchOrder.value.toLowerCase();
 					this.orderListContainer.innerHTML = "";
 
-					const filteredOrders = orderData.filter((order) => {
+					const filteredOrders = this.orders.filter((order) => {
 						return order.id.toLowerCase().includes(searchValue);
 					});
+
+					// Show no orders placeholder if no orders or no filtered orders
+					if (this.orders.length === 0) {
+						this.noOrdersPlaceholder.classList.remove("hidden");
+						return;
+					}
+
+					if (filteredOrders.length === 0) {
+						this.orderListContainer.innerHTML = `
+                    <div class="text-center py-12 bg-gray-100 rounded-lg">
+                        <i class="fas fa-search text-4xl text-gray-400 mb-4"></i>
+                        <p class="text-gray-600">No orders match your search</p>
+                    </div>
+                `;
+						return;
+					}
 
 					filteredOrders.forEach((order) => this.renderOrderItem(order));
 				}
@@ -240,19 +218,19 @@
 						"items-center"
 					);
 					orderItemElement.innerHTML = `
-                    <div>
-                        <h2 class="text-xl font-bold">Order ID: ${order.id}</h2>
-                        <p class="text-gray-600">Date: ${order.date}</p>
-                    </div>
-                    <div>
-                        <span class="text-lg font-bold">$${order.total.toFixed(
-													2
-												)}</span>
-                        <button class="mt-2 text-blue-600 hover:underline view-details" data-id="${
-													order.id
-												}">View Details</button>
-                    </div>
-                `;
+                <div>
+                    <h2 class="text-xl font-bold">Order ID: ${order.id}</h2>
+                    <p class="text-gray-600">Date: ${order.date}</p>
+                </div>
+                <div>
+                    <span class="text-lg font-bold">$${order.total.toFixed(
+											2
+										)}</span>
+                    <button class="mt-2 text-blue-600 hover:underline view-details" data-id="${
+											order.id
+										}">View Details</button>
+                </div>
+            `;
 					this.orderListContainer.appendChild(orderItemElement);
 
 					// Add event listener for view details button
@@ -265,36 +243,34 @@
 
 				showOrderDetails(order) {
 					this.orderModalContent.innerHTML = `
-                    <h2 class="text-2xl font-bold mb-4">Order Details: ${
-											order.id
-										}</h2>
-                    <p class="text-gray-600 mb-2">Date: ${order.date}</p>
-                    <h3 class="text-xl font-bold mb-2">Items:</h3>
-                    <div class="space-y-4">
-                        ${order.items
-													.map(
-														(item) => `
-                            <div class="flex items-center space-x-4">
-                                <img src="${
-																	item.image
-																}" class="w-16 h-16 object-cover rounded-lg" />
-                                <div>
-                                    <h4 class="text-lg font-bold">${
-																			item.name
-																		}</h4>
-                                    <p class="text-gray-600">Price: $${item.price.toFixed(
-																			2
-																		)} x ${item.quantity}</p>
-                                </div>
+                <h2 class="text-2xl font-bold mb-4">Order Details: ${
+									order.id
+								}</h2>
+                <p class="text-gray-600 mb-2">Date: ${order.date}</p>
+                <h3 class="text-xl font-bold mb-2">Items:</h3>
+                <div class="space-y-4">
+                    ${order.items
+											.map(
+												(item) => `
+                        <div class="flex items-center space-x-4">
+                            <img src="${
+															item.image
+														}" class="w-16 h-16 object-cover rounded-lg" />
+                            <div>
+                                <h4 class="text-lg font-bold">${item.name}</h4>
+                                <p class="text-gray-600">Price: $${item.price.toFixed(
+																	2
+																)} x ${item.quantity}</p>
                             </div>
-                        `
-													)
-													.join("")}
-                    </div>
-                    <h3 class="text-xl font-bold mt-4">Total: $${order.total.toFixed(
-											2
-										)}</h3>
-                `;
+                        </div>
+                    `
+											)
+											.join("")}
+                </div>
+                <h3 class="text-xl font-bold mt-4">Total: $${order.total.toFixed(
+									2
+								)}</h3>
+            `;
 					this.orderDetailsModal.classList.remove("hidden");
 				}
 			}
