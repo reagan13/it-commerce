@@ -3,7 +3,6 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
 		<title>Sign In</title>
 		<link rel="stylesheet" href="../design2.css" />
 		<script>
@@ -17,7 +16,7 @@
 			<nav class="Navigations">
 				<div class="Logo">
 					<img src="../PICTURES/Logo.png" alt="Logo" class="logo-img" />
-					<h2><a href="index.html">IT Services</a></h2>
+					<h2><a href="../index.html">IT Services</a></h2>
 				</div>
 				<ul class="Header-Links">
 					<li><a href="../index.html">Home</a></li>
@@ -29,9 +28,11 @@
 		</header>
 
 		<div class="whole-sign-up">
-			<form class="Sign-In">
+			<form class="Sign-In" method="post" action="#" autocomplete="on">
 				<p class="signuptitle">Sign in to your account</p>
-				<p class="signup-message">Signup now and get full access to our app.</p>
+				<p class="signup-message">
+					Sign in now and get full access to our app.
+				</p>
 				<div class="signupflex"></div>
 				<label>
 					<input
@@ -39,7 +40,10 @@
 						placeholder="Enter email"
 						type="email"
 						class="signininput"
+						name="email"
+						autocomplete="email"
 					/>
+					<span>Email</span>
 				</label>
 				<label>
 					<input
@@ -47,24 +51,30 @@
 						placeholder="Enter password"
 						type="password"
 						class="signininput"
+						name="password"
+						autocomplete="current-password"
 					/>
+					<span>Password</span>
 				</label>
-				<button class="signupsubmit">Sign In</button>
+				<button type="submit" class="signupsubmit">Sign In</button>
 				<p class="signinup">No account? <a href="sign-up.html">Sign Up</a></p>
+				<p class="forgot-password">
+					<a href="forgot-password.html">Forgot Password?</a>
+				</p>
 			</form>
 		</div>
 
 		<div class="signupbottom-details">
 			<div class="signupbottom_text">
-				<span class="signupcopyright_text"
-					>&#169; <a href="#">IT Services.</a> All rights reserved 2024</span
-				>
+				<span class="signupcopyright_text">
+					&#169; <a href="#">IT Services.</a> All rights reserved 2024
+				</span>
 				<span class="signuppolicy_terms">
 					<a href="#">Terms & Conditions</a>
 				</span>
 			</div>
 		</div>
 
-		<script src="js/script.js"></script>
+		<script src="./login.js"></script>
 	</body>
 </html>

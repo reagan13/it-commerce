@@ -29,23 +29,41 @@
 			</header>
 
 			<div class="whole-sign-up">
-				<form class="Sign-Up">
+				<form class="Sign-Up" method="post" action="#">
 					<p class="signuptitle">Register</p>
 					<p class="signup-message">
 						Signup now and get full access to our app.
 					</p>
 					<div class="signupflex">
 						<label>
-							<input required placeholder="" type="text" class="signupinput" />
+							<input
+								required
+								placeholder=""
+								type="text"
+								class="signupinput"
+								name="first_name"
+							/>
 							<span>Firstname</span>
 						</label>
 						<label>
-							<input required placeholder="" type="text" class="signupinput" />
+							<input
+								required
+								placeholder=""
+								type="text"
+								class="signupinput"
+								name="last_name"
+							/>
 							<span>Lastname</span>
 						</label>
 					</div>
 					<label>
-						<input required placeholder="" type="email" class="signupinput" />
+						<input
+							required
+							placeholder=""
+							type="email"
+							class="signupinput"
+							name="email"
+						/>
 						<span>Email</span>
 					</label>
 					<label>
@@ -54,6 +72,7 @@
 							placeholder=""
 							type="password"
 							class="signupinput"
+							name="password"
 						/>
 						<span>Password</span>
 					</label>
@@ -63,10 +82,11 @@
 							placeholder=""
 							type="password"
 							class="signupinput"
+							name="confirm_password"
 						/>
 						<span>Confirm password</span>
 					</label>
-					<button class="signupsubmit">Submit</button>
+					<button type="submit" class="signupsubmit">Submit</button>
 					<p class="signinup">
 						Already have an account? <a href="sign-in.html">Signin</a>
 					</p>
@@ -84,6 +104,6 @@
 				</div>
 			</div>
 		</div>
-		<script src="js/signup.js"></script>
+		<script src="./signUp.js"></script>
 	</body>
 </html>
