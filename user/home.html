@@ -11,369 +11,52 @@
 		/>
 	</head>
 	<body class="bg-white text-gray-900 font-sans">
-		<!-- Mobile Navigation Menu -->
-		<div
-			id="mobileMenu"
-			class="sticky fixed top-0 inset-0 bg-white z-60 hidden"
-		>
-			<div class="flex justify-between p-6">
-				<div class="flex items-center space-x-4">
-					<img
-						src="https://via.placeholder.com/40"
-						alt="TechSphere Logo"
-						class="rounded-full"
-					/>
-					<h1 class="text-2xl font-bold text-blue-600">TechSphere</h1>
-				</div>
-				<button id="closeMobileMenu" class="text-2xl">
-					<i class="fas fa-times"></i>
-				</button>
-			</div>
-			<nav class="flex flex-col space-y-4 p-6">
-				<a href="home.html" class="text-xl">Home</a>
-				<a href="products.html" class="text-xl">Products</a>
-				<a href="services.html" class="text-xl">Services</a>
-				<div class="border-t pt-4">
-					<a href="cart.html" class="block py-2">Cart</a>
-					<a href="order.html" class="block py-2">Orders</a>
-					<a href="#" class="block py-2">Settings</a>
-					<a href="#" class="block py-2">Logout</a>
-				</div>
-			</nav>
-		</div>
-
-		<!-- Navigation -->
-		<nav class="sticky w-full top-0 fixed z-50 bg-white shadow-sm border">
-			<div
-				class="container mx-auto px-6 py-4 flex justify-between items-center"
-			>
-				<div class="flex items-center space-x-4">
-					<img
-						src="https://via.placeholder.com/40"
-						alt="TechSphere Logo"
-						class="rounded-full"
-					/>
-					<h1 class="text-2xl font-bold text-blue-600">TechSphere</h1>
-				</div>
-
-				<!-- Desktop Navigation -->
-				<div class="hidden md:flex items-center space-x-6">
-					<a href="#" class="text-gray-700 hover:text-blue-600">Home</a>
-					<a href="products.html" class="text-gray-700 hover:text-blue-600"
-						>Products</a
-					>
-					<a href="services.html" class="text-gray-700 hover:text-blue-600"
-						>Services</a
-					>
-					<div class="relative">
-						<button
-							id="profileToggle"
-							class="text-gray-700 hover:text-blue-600"
-						>
-							<i class="fas fa-user text-xl"></i>
-						</button>
-						<div
-							id="profileDropdown"
-							class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg"
-						>
-							<div class="py-1">
-								<a
-									href="cart.html"
-									class="block px-4 py-2 text-gray-700 hover:bg-blue-50"
-								>
-									<i class="fas fa-shopping-cart mr-2"></i>Cart
-								</a>
-								<a
-									href="order.html"
-									class="block px-4 py-2 text-gray-700 hover:bg-blue-50"
-								>
-									<i class="fas fa-list mr-2"></i>Orders
-								</a>
-								<a
-									href="#"
-									class="block px-4 py-2 text-gray-700 hover:bg-blue-50"
-								>
-									<i class="fas fa-cog mr-2"></i>Settings
-								</a>
-								<a
-									href="#"
-									class="block px-4 py-2 text-gray-700 hover:bg-blue-50"
-								>
-									<i class="fas fa-sign-out-alt mr-2"></i>Logout
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<!-- Mobile Menu Toggle -->
-				<button id="mobileMenuToggle" class="md:hidden text-2xl">
-					<i class="fas fa-bars"></i>
-				</button>
-			</div>
-		</nav>
-
-		<!-- Hero Section -->
-		<section class="px-6 flex items-center pt-10">
-			<div class="w-full flex flex-col-reverse lg:flex-row items-center -">
-				<div
-					class="w-full lg:w-1/2 md:pr-12 text-center md:text-left space-y-10 lg:pt-0 pt-10"
-				>
-					<h2
-						class="text-3xl md:text-5xl font-bold text-blue-600 mb-6 leading-tight"
-					>
-						Driving Success Through Smart IT Solutions
-					</h2>
-					<p class="text-lg md:text-xl text-gray-600 mb-8 leading-relaxed">
-						Partnering with you to create innovative, practical, and impactful
-						technology strategies for your business growth.
-					</p>
-					<div class="flex justify-center md:justify-start space-x-4">
-						<a
-							href="products.html"
-							class="bg-blue-600 text-white px-6 md:px-8 py-2 md:py-3 rounded-full hover:bg-blue-700"
-						>
-							Explore Products
-						</a>
-						<a
-							href="services.html"
-							class="border-2 border-blue-600 text-blue-600 px-6 md:px-8 py-2 md:py-3 rounded-full hover:bg-blue-50"
-						>
-							Our Services
-						</a>
-					</div>
-				</div>
-				<div class="w-full lg:w-1/2 mb-8 md:mb-0 flex justify-center">
-					<img
-						src="./assets/astro.png"
-						alt="astronaut"
-						class="rounded-xl shadow-xl w-auto lg:w-full h-[400px] lg:h-[600px]"
-					/>
-				</div>
-			</div>
-		</section>
-
-		<!-- Products Section -->
-		<section id="products" class="container mx-auto px-6 py-16">
-			<h2 class="text-4xl font-bold text-center text-blue-600 mb-12">
-				Top Products
-			</h2>
-			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-				<!-- Product Cards (Responsive grid) -->
-				<div
-					class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md"
-				>
-					<img
-						src="./assets/gpu.jpg"
-						alt="Product"
-						class="w-full h-64 object-cover"
-					/>
-					<div class="p-6">
-						<h3 class="text-xl font-semibold text-gray-800 mb-2">
-							High-Performance GPU
-						</h3>
-						<p class="text-gray-600 mb-4">
-							Ultimate gaming and rendering capabilities
-						</p>
-						<div class="flex justify-between items-center">
-							<span class="text-2xl font-bold text-blue-600">$599.99</span>
-							<button
-								class="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700"
-							>
-								Add to Cart
-							</button>
-						</div>
-					</div>
-				</div>
-				<div
-					class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md"
-				>
-					<img
-						src="./assets/laptop.png"
-						alt="Product"
-						class="w-full h-64 object-cover"
-					/>
-					<div class="p-6">
-						<h3 class="text-xl font-semibold text-gray-800 mb-2">
-							Gaming Laptop
-						</h3>
-						<p class="text-gray-600 mb-4">
-							Powerful performance for gamers and creators
-						</p>
-						<div class="flex justify-between items-center">
-							<span class="text-2xl font-bold text-blue-600">$1,299.99</span>
-							<button
-								class="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700"
-							>
-								Add to Cart
-							</button>
-						</div>
-					</div>
-				</div>
-				<div
-					class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md"
-				>
-					<img
-						src="./assets/headphone.jpg"
-						alt="Product"
-						class="w-full h-64 object-cover"
-					/>
-					<div class="p-6">
-						<h3 class="text-xl font-semibold text-gray-800 mb-2">
-							Wireless Headphones
-						</h3>
-						<p class="text-gray-600 mb-4">
-							Experience immersive sound without the wires
-						</p>
-						<div class="flex justify-between items-center">
-							<span class="text-2xl font-bold text-blue-600">$199.99</span>
-							<button
-								class="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700"
-							>
-								Add to Cart
-							</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-
-		<!-- Services Section -->
-		<section id="services" class="bg-blue-50 py-16">
-			<div class="container mx-auto px-6">
-				<h2 class="text-4xl font-bold text-center text-blue-600 mb-12">
-					Our Services
-				</h2>
-				<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-					<div
-						class="bg-white p-6 rounded-xl shadow-md text-center hover:shadow-lg"
-					>
-						<i class="fas fa-tools text-5xl text-blue-600 mb-4"></i>
-						<h3 class="font-bold text-xl mb-2">Computer Repair</h3>
-						<p class="text-gray-600">
-							Expert diagnosis and repair for all computer issues.
-						</p>
-					</div>
-					<div
-						class="bg-white p-6 rounded-xl shadow-md text-center hover:shadow-lg"
-					>
-						<i class="fas fa-network-wired text-5xl text-blue-600 mb-4"></i>
-						<h3 class="font-bold text-xl mb-2">Network Setup</h3>
-						<p class="text-gray-600">
-							Professional network configuration and optimization.
-						</p>
-					</div>
-					<div
-						class="bg-white p-6 rounded-xl shadow-md text-center hover:shadow-lg"
-					>
-						<i class="fas fa-shield-alt text-5xl text-blue-600 mb-4"></i>
-						<h3 class="font-bold text-xl mb-2">Cybersecurity</h3>
-						<p class="text-gray-600">
-							Comprehensive security solutions for businesses.
-						</p>
-					</div>
-				</div>
-			</div>
-		</section>
-
-		<!-- Testimonials Section -->
-		<section class="container mx-auto px-6 py-16">
-			<h2 class="text-4xl font-bold text-center text-blue-600 mb-12">
-				What Our Clients Say
-			</h2>
-			<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-				<div class="bg-white p-6 rounded-xl shadow-md">
-					<p class="italic mb-4">
-						"Exceptional service and top-quality parts!"
-					</p>
-					<div class="flex items-center">
-						<img
-							src="./assets/profile-1.jpg"
-							class="rounded-full mr-4 size-20"
-						/>
-						<div>
-							<h4 class="font-bold">John Doe</h4>
-							<p class="text-gray-600">CEO, Tech Innovations</p>
-						</div>
-					</div>
-				</div>
-				<div class="bg-white p-6 rounded-xl shadow-md">
-					<p class="italic mb-4">
-						"Fast and reliable service, highly recommend!"
-					</p>
-					<div class="flex items-center">
-						<img
-							src="./assets/profile-2.jpg"
-							class="rounded-full mr-4 size-20"
-						/>
-						<div>
-							<h4 class="font-bold">Jane Smith</h4>
-							<p class="text-gray-600">Manager, Creative Solutions</p>
-						</div>
-					</div>
-				</div>
-				<div class="bg-white p-6 rounded-xl shadow-md">
-					<p class="italic mb-4">"Great experience from start to finish!"</p>
-					<div class="flex items-center">
-						<img
-							src="./assets/profile-3.jpg"
-							class="rounded-full mr-4 size-20"
-						/>
-						<div>
-							<h4 class="font-bold">Emily Johnson</h4>
-							<p class="text-gray-600">Freelancer</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-
-		<!-- Footer -->
-		<footer class="bg-gray-800 text-white py-6">
-			<div class="container mx-auto text-center">
-				<p class="mb-2">© 2023 TechSphere. All rights reserved.</p>
-				<div class="flex justify-center space-x-4">
-					<a href="#" class="text-gray-400 hover:text-white"
-						><i class="fab fa-facebook-f"></i
-					></a>
-					<a href="#" class="text-gray-400 hover:text-white"
-						><i class="fab fa-twitter"></i
-					></a>
-					<a href="#" class="text-gray-400 hover:text-white"
-						><i class="fab fa-linkedin-in"></i
-					></a>
-					<a href="#" class="text-gray-400 hover:text-white"
-						><i class="fab fa-instagram"></i
-					></a>
-				</div>
-			</div>
-		</footer>
+		<!-- Components -->
+		<div id="navigationBar"></div>
+		<div id="hero-section"></div>
+		<div id="home-products"></div>
+		<div id="home-services"></div>
+		<div id="home-testimonial"></div>
+		<div id="footer"></div>
 
 		<script>
-			const mobileMenuToggle = document.getElementById("mobileMenuToggle");
-			const mobileMenu = document.getElementById("mobileMenu");
-			const closeMobileMenu = document.getElementById("closeMobileMenu");
+			// Dynamically load HTML components and their respective scripts
+			async function loadComponents() {
+				const components = [
+					{ id: "navigationBar", path: "/components/nav.html" },
+					{ id: "hero-section", path: "/components/hero-section.html" },
+					{ id: "home-products", path: "/components/home-products.html" },
+					{ id: "home-services", path: "/components/home-services.html" },
+					{ id: "home-testimonial", path: "/components/home-testimonial.html" },
+					{ id: "footer", path: "/components/footer.html" },
+				];
 
-			mobileMenuToggle.addEventListener("click", () => {
-				mobileMenu.classList.toggle("hidden");
-			});
+				try {
+					for (const component of components) {
+						const response = await fetch(component.path);
+						const html = await response.text();
+						document.getElementById(component.id).innerHTML = html;
 
-			closeMobileMenu.addEventListener("click", () => {
-				mobileMenu.classList.add("hidden");
-			});
-
-			const profileToggle = document.getElementById("profileToggle");
-			const profileDropdown = document.getElementById("profileDropdown");
-
-			profileToggle.addEventListener("click", () => {
-				profileDropdown.classList.toggle("hidden");
-			});
-
-			window.addEventListener("click", (event) => {
-				if (!event.target.closest("#profileToggle")) {
-					profileDropdown.classList.add("hidden");
+						// Execute inline scripts of the loaded component
+						executeInlineScripts(document.getElementById(component.id));
+					}
+				} catch (error) {
+					console.error("Error loading components:", error);
 				}
-			});
+			}
+
+			// Helper: Execute inline <script> tags of a loaded component
+			function executeInlineScripts(element) {
+				const scripts = element.querySelectorAll("script");
+				scripts.forEach((script) => {
+					const newScript = document.createElement("script");
+					newScript.textContent = script.textContent; // Re-execute inline JS
+					document.body.appendChild(newScript).remove(); // Clean up after execution
+				});
+			}
+
+			// Load components when the page is ready
+			document.addEventListener("DOMContentLoaded", loadComponents);
 		</script>
 	</body>
 </html>

@@ -12,80 +12,7 @@
 	</head>
 	<body class="bg-gray-50 text-gray-900 font-sans">
 		<!-- Navigation -->
-		<nav class="fixed w-full top-0 z-50 bg-white shadow-sm">
-			<div
-				class="container mx-auto px-6 py-4 flex justify-between items-center"
-			>
-				<div class="flex items-center space-x-4">
-					<img
-						src="https://via.placeholder.com/40"
-						alt="TechSphere Logo"
-						class="rounded-full"
-					/>
-					<h1 class="text-2xl font-bold text-blue-600">TechSphere</h1>
-				</div>
-
-				<div class="flex items-center space-x-6">
-					<a
-						href="index.html"
-						class="text-gray-700 hover:text-blue-600 transition-colors"
-						>Home</a
-					>
-					<a
-						href="products.html"
-						class="text-gray-700 hover:text-blue-600 transition-colors"
-						>Products</a
-					>
-					<a
-						href="services.html"
-						class="text-gray-700 hover:text-blue-600 transition-colors"
-						>Services</a
-					>
-					<a href="#" class="text-blue-600 border-b-2 border-blue-600">Cart</a>
-
-					<div class="relative">
-						<button
-							id="profileToggle"
-							class="text-gray-700 hover:text-blue-600"
-						>
-							<i class="fas fa-user text-xl"></i>
-						</button>
-
-						<div
-							id="profileDropdown"
-							class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg"
-						>
-							<div class="py-1">
-								<a
-									href="#"
-									class="block px-4 py-2 text-gray-700 hover:bg-blue-50"
-								>
-									<i class="fas fa-shopping-cart mr-2"></i>Cart
-								</a>
-								<a
-									href="#"
-									class="block px-4 py-2 text-gray-700 hover:bg-blue-50"
-								>
-									<i class="fas fa-list mr-2"></i>Orders
-								</a>
-								<a
-									href="#"
-									class="block px-4 py-2 text-gray-700 hover:bg-blue-50"
-								>
-									<i class="fas fa-cog mr-2"></i>Settings
-								</a>
-								<a
-									href="#"
-									class="block px-4 py-2 text-gray-700 hover:bg-blue-50"
-								>
-									<i class="fas fa-sign-out-alt mr-2"></i>Logout
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</nav>
+		<div id="navigationBar"></div>
 
 		<!-- Cart Section -->
 		<div class="container mx-auto px-6 pt-24">
@@ -127,5 +54,40 @@
 		</div>
 
 		<script src="./js/cart.js"></script>
+		<script>
+			// new
+			// Dynamically load HTML components and their respective scripts
+			async function loadComponents() {
+				const components = [
+					{ id: "navigationBar", path: "/components/nav.html" },
+				];
+
+				try {
+					for (const component of components) {
+						const response = await fetch(component.path);
+						const html = await response.text();
+						document.getElementById(component.id).innerHTML = html;
+
+						// Execute inline scripts of the loaded component
+						executeInlineScripts(document.getElementById(component.id));
+					}
+				} catch (error) {
+					console.error("Error loading components:", error);
+				}
+			}
+
+			// Helper: Execute inline <script> tags of a loaded component
+			function executeInlineScripts(element) {
+				const scripts = element.querySelectorAll("script");
+				scripts.forEach((script) => {
+					const newScript = document.createElement("script");
+					newScript.textContent = script.textContent; // Re-execute inline JS
+					document.body.appendChild(newScript).remove(); // Clean up after execution
+				});
+			}
+
+			// Load components when the page is ready
+			document.addEventListener("DOMContentLoaded", loadComponents);
+		</script>
 	</body>
 </html>

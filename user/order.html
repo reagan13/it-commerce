@@ -12,9 +12,7 @@
 	</head>
 	<body class="bg-gray-50 text-gray-900 font-sans">
 		<!-- Navigation (keep your existing navigation) -->
-		<nav class="fixed w-full top-0 z-50 bg-white shadow-sm">
-			<!-- Your existing navigation HTML -->
-		</nav>
+		<div id="navigationBar"></div>
 
 		<!-- Order History Section -->
 		<div class="container mx-auto px-6 pt-24">
@@ -277,6 +275,41 @@
 
 			// Initialize Order Manager
 			new OrderManager();
+		</script>
+		<script>
+			// new
+			// Dynamically load HTML components and their respective scripts
+			async function loadComponents() {
+				const components = [
+					{ id: "navigationBar", path: "/components/nav.html" },
+				];
+
+				try {
+					for (const component of components) {
+						const response = await fetch(component.path);
+						const html = await response.text();
+						document.getElementById(component.id).innerHTML = html;
+
+						// Execute inline scripts of the loaded component
+						executeInlineScripts(document.getElementById(component.id));
+					}
+				} catch (error) {
+					console.error("Error loading components:", error);
+				}
+			}
+
+			// Helper: Execute inline <script> tags of a loaded component
+			function executeInlineScripts(element) {
+				const scripts = element.querySelectorAll("script");
+				scripts.forEach((script) => {
+					const newScript = document.createElement("script");
+					newScript.textContent = script.textContent; // Re-execute inline JS
+					document.body.appendChild(newScript).remove(); // Clean up after execution
+				});
+			}
+
+			// Load components when the page is ready
+			document.addEventListener("DOMContentLoaded", loadComponents);
 		</script>
 	</body>
 </html>
