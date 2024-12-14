@@ -644,7 +644,41 @@ class CartManager {
 
 		return itemElement;
 	}
+	async updateCartItemQuantity(productId, quantity) {
+		try {
+			const response = await fetch(`${this.apiBaseUrl}/cart/update-quantity`, {
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					userId: this.userId,
+					productId,
+					quantity: parseInt(quantity, 10),
+				}),
+			});
 
+			if (!response.ok) {
+				const errorData = await response.json();
+				throw new Error(
+					errorData.error || "Failed to update cart item quantity"
+				);
+			}
+
+			const data = await response.json();
+			console.log("Cart item quantity updated:", data.message);
+
+			// Optionally, re-render the cart or update the UI
+			await this.renderCart();
+		} catch (error) {
+			console.error("Error updating cart item quantity:", error);
+			this.showErrorAlert(
+				error.message || "Failed to update cart item quantity"
+			);
+		}
+	}
+
+	// Updated attachCartEventListeners method
 	attachCartEventListeners() {
 		const decreaseButtons = document.querySelectorAll(".decrease-quantity");
 		const increaseButtons = document.querySelectorAll(".increase-quantity");
@@ -655,28 +689,31 @@ class CartManager {
 				const input = document.querySelector(
 					`input[data-product-id="${productId}"]`
 				);
-				const totalQuantitySpan = input
-					.closest(".flex-grow")
-					.querySelector(".total-quantity");
-				const subtotalDisplay = input
-					.closest(".flex-grow")
-					.querySelector(".subtotal-display");
-				const price = parseFloat(
-					input
-						.closest(".flex-grow")
-						.querySelector('p[class*="text-gray-600"]')
-						.textContent.replace("Price: $", "")
-				);
 
 				// Ensure input value doesn't go below 1
-				if (parseInt(input.value) > 1) {
-					input.value = parseInt(input.value) - 1;
+				const currentQuantity = parseInt(input.value);
+				if (currentQuantity > 1) {
+					const newQuantity = currentQuantity - 1;
+
+					// Update UI
+					input.value = newQuantity;
 
 					// Update subtotal display
-					const newSubtotal = price * parseInt(input.value);
+					const priceElement = input
+						.closest(".flex-grow")
+						.querySelector('p[class*="text-gray-600"]');
+					const price = parseFloat(
+						priceElement.textContent.replace("Price: $", "")
+					);
+					const subtotalDisplay = input
+						.closest(".flex-grow")
+						.querySelector(".subtotal-display");
+
+					const newSubtotal = price * newQuantity;
 					subtotalDisplay.textContent = `Subtotal: $${newSubtotal.toFixed(2)}`;
 
-					this.updateCartItemQuantity(productId, input.value);
+					// Update backend
+					this.updateCartItemQuantity(productId, newQuantity);
 				}
 			});
 		});
@@ -687,35 +724,41 @@ class CartManager {
 				const input = document.querySelector(
 					`input[data-product-id="${productId}"]`
 				);
+
 				const totalQuantitySpan = input
 					.closest(".flex-grow")
 					.querySelector(".total-quantity");
+				const totalQuantity = parseInt(totalQuantitySpan.textContent);
+
+				const currentQuantity = parseInt(input.value);
+
+				// Allow incrementing up to a maximum of 10 or the total quantity
+
+				const newQuantity = currentQuantity + 1;
+
+				// Update UI
+				input.value = newQuantity;
+
+				// Update subtotal display
+				const priceElement = input
+					.closest(".flex-grow")
+					.querySelector('p[class*="text-gray-600"]');
+				const price = parseFloat(
+					priceElement.textContent.replace("Price: $", "")
+				);
 				const subtotalDisplay = input
 					.closest(".flex-grow")
 					.querySelector(".subtotal-display");
-				const totalQuantity = parseInt(totalQuantitySpan.textContent);
-				const price = parseFloat(
-					input
-						.closest(".flex-grow")
-						.querySelector('p[class*="text-gray-600"]')
-						.textContent.replace("Price: $", "")
-				);
 
-				// Allow incrementing up to a maximum of 10 or the total quantity
-				const currentQuantity = parseInt(input.value);
+				const newSubtotal = price * newQuantity;
+				subtotalDisplay.textContent = `Subtotal: $${newSubtotal.toFixed(2)}`;
 
-				if (currentQuantity < 10) {
-					input.value = currentQuantity + 1;
-
-					// Update subtotal display
-					const newSubtotal = price * parseInt(input.value);
-					subtotalDisplay.textContent = `Subtotal: $${newSubtotal.toFixed(2)}`;
-
-					this.updateCartItemQuantity(productId, input.value);
-				}
+				// Update backend
+				this.updateCartItemQuantity(productId, newQuantity);
 			});
 		});
-		// Add remove item listeners
+
+		// Remove item listeners (as in your previous code)
 		const removeButtons = document.querySelectorAll(".remove-item");
 		removeButtons.forEach((button) => {
 			button.addEventListener("click", (e) => {
@@ -724,35 +767,7 @@ class CartManager {
 			});
 		});
 	}
-	async updateCartItemQuantity(productId, quantity) {
-		try {
-			const response = await fetch(
-				`${this.apiBaseUrl}/cart/${this.userId}/update`,
-				{
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify({
-						productId,
-						quantity: parseInt(quantity),
-					}),
-				}
-			);
 
-			if (!response.ok) {
-				const errorBody = await response.text();
-				console.error("Error updating cart item:", errorBody);
-				throw new Error(`HTTP error! status: ${response.status}`);
-			}
-
-			// Re-render the cart to reflect changes
-			await this.renderCart();
-		} catch (error) {
-			console.error("Error updating cart item quantity:", error);
-			this.showCartMessage("Failed to update cart. Please try again.", false);
-		}
-	}
 	removeExistingEventListeners() {
 		// Logic to remove existing event listeners if necessary
 	}

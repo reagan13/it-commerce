@@ -576,3 +576,53 @@ app.get("/api/orders", (req, res) => {
 		res.status(200).json(parsedResults);
 	});
 });
+
+app.put("/api/cart/update-quantity", (req, res) => {
+	const { userId, productId, quantity } = req.body;
+
+	if (!userId || !productId || quantity === undefined) {
+		return res.status(400).json({
+			error: "User ID, Product ID, and Quantity are required",
+		});
+	}
+
+	// Validate quantity
+	const parsedQuantity = parseInt(quantity, 10);
+	if (isNaN(parsedQuantity) || parsedQuantity < 1) {
+		return res.status(400).json({
+			error: "Quantity must be a positive number",
+		});
+	}
+
+	// Update query to modify the quantity for a specific cart item
+	const updateQuery = `
+        UPDATE cart 
+        SET quantity = ? 
+        WHERE user_id = ? AND product_id = ?
+    `;
+
+	connection.query(
+		updateQuery,
+		[parsedQuantity, userId, productId],
+		(err, result) => {
+			if (err) {
+				return res.status(500).json({
+					error: "Database error",
+					details: err.message,
+				});
+			}
+
+			// Check if any rows were actually updated
+			if (result.affectedRows === 0) {
+				return res.status(404).json({
+					error: "Cart item not found",
+				});
+			}
+
+			res.status(200).json({
+				message: "Cart item quantity updated successfully",
+				updatedQuantity: parsedQuantity,
+			});
+		}
+	);
+});
