@@ -55,7 +55,7 @@ class CartManager {
 				cartContainer.innerHTML = `
                     <div class="text-center text-gray-500 py-10">
                         <p class="text-xl">Your cart is empty</p>
-                        <a href="/products.html" class="text-blue-600 hover:underline mt-4 inline-block">
+                        <a href="../products.html" class="text-blue-600 hover:underline mt-4 inline-block">
                             Continue Shopping
                         </a>
                     </div>
@@ -295,7 +295,124 @@ class CartManager {
 			}
 		}
 	}
+	async removeCartItem(productId) {
+		// Create a custom confirmation dialog
+		const confirmRemove = await this.showConfirmationDialog(
+			"Remove Item",
+			"Are you sure you want to remove this item from your cart?"
+		);
 
+		if (confirmRemove) {
+			try {
+				const response = await fetch(
+					`${this.apiBaseUrl}/cart/remove`, // Correct endpoint
+					{
+						method: "DELETE",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify({
+							userId: this.userId,
+							productId,
+						}),
+					}
+				);
+
+				if (!response.ok) {
+					throw new Error("Failed to remove item from cart");
+				}
+
+				const data = await response.json();
+				console.log("Item removed from cart:", data.message);
+
+				// Custom success alert
+				this.showSuccessAlert("Item removed from cart successfully!");
+
+				// Reload the page after a short delay to show the alert
+				setTimeout(() => {
+					window.location.reload();
+				}, 1500); // 1.5 seconds delay to show the alert
+			} catch (error) {
+				console.error("Error removing item from cart:", error);
+				this.showErrorAlert("Failed to remove item from cart");
+			}
+		}
+	}
+
+	// Add these methods to your CartManager class
+	showSuccessAlert(message) {
+		const alertContainer = document.createElement("div");
+		alertContainer.classList.add(
+			"fixed",
+			"top-4",
+			"left-1/2",
+			"transform",
+			"-translate-x-1/2",
+			"bg-green-500",
+			"text-white",
+			"px-6",
+			"py-4",
+			"rounded-lg",
+			"shadow-lg",
+			"z-50",
+			"transition-all",
+			"duration-300"
+		);
+		alertContainer.textContent = message;
+
+		document.body.appendChild(alertContainer);
+
+		// Animate in
+		setTimeout(() => {
+			alertContainer.classList.add("opacity-100", "translate-y-0");
+		}, 10);
+
+		// Remove after 3 seconds
+		setTimeout(() => {
+			alertContainer.classList.add("opacity-0", "-translate-y-full");
+			setTimeout(() => {
+				document.body.removeChild(alertContainer);
+			}, 300);
+		}, 1500);
+	}
+
+	showErrorAlert(message) {
+		const alertContainer = document.createElement("div");
+		alertContainer.classList.add(
+			"fixed",
+			"top-4",
+			"left-1/2",
+			"transform",
+			"-translate-x-1/2",
+			"bg-red-500",
+			"text-white",
+			"px-6",
+			"py-4",
+			"rounded-lg",
+			"shadow-lg",
+			"z-50",
+			"transition-all",
+			"duration-300",
+			"opacity-0",
+			"-translate-y-full"
+		);
+		alertContainer.textContent = message;
+
+		document.body.appendChild(alertContainer);
+
+		// Animate in
+		setTimeout(() => {
+			alertContainer.classList.add("opacity-100", "translate-y-0");
+		}, 10);
+
+		// Remove after 3 seconds
+		setTimeout(() => {
+			alertContainer.classList.add("opacity-0", "-translate-y-full");
+			setTimeout(() => {
+				document.body.removeChild(alertContainer);
+			}, 300);
+		}, 1500);
+	}
 	// In attachCartEventListeners method
 	attachCartEventListeners() {
 		// Existing code...
