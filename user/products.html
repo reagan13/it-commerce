@@ -10,13 +10,13 @@
 			rel="stylesheet"
 		/>
 	</head>
-	<body class="bg-gray-50">
+	<body class="bg-gray-50 h-screen overflow-hidden">
 		<div id="navigationBar"></div>
-		<div class="container mx-auto px-4 py-8">
-			<div class="flex">
+		<div class="container mx-auto px-4 py-8 h-screen">
+			<div class="flex h-full">
 				<!-- Left Sidebar - Filters -->
-				<div class="w-1/4 pr-6 hidden">
-					<div class="bg-white rounded-lg shadow-md p-6">
+				<div class="w-1/4 pr-6">
+					<div class="bg-white rounded-lg shadow-md p-6 h-full">
 						<h2 class="text-2xl font-bold mb-6 text-blue-600">Filters</h2>
 
 						<!-- Search Input -->
@@ -128,19 +128,11 @@
 								</div>
 							</div>
 						</div>
-
-						<!-- Apply Filters Button -->
-						<button
-							id="applyFiltersBtn"
-							class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
-						>
-							Apply Filters
-						</button>
 					</div>
 				</div>
 
 				<!-- Right Main Content - Products Grid -->
-				<div class="w-3/4">
+				<div class="w-3/4 overflow-y-auto mb-14">
 					<div class="mb-6">
 						<h1 class="text-3xl font-bold text-blue-600">Our Products</h1>
 						<p class="text-gray-600">
@@ -154,35 +146,35 @@
 					</div>
 				</div>
 			</div>
+		</div>
 
-			<!-- Quick View Modal -->
-			<div
-				id="quickViewModal"
-				class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center"
-			>
-				<div class="bg-white rounded-lg max-w-4xl w-full p-8 relative">
-					<button
-						id="closeModalBtn"
-						class="absolute top-4 right-4 text-gray-600 hover:text-gray-900"
+		<!-- Quick View Modal -->
+		<div
+			id="quickViewModal"
+			class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center"
+		>
+			<div class="bg-white rounded-lg max-w-4xl w-full p-8 relative">
+				<button
+					id="closeModalBtn"
+					class="absolute top-4 right-4 text-gray-600 hover:text-gray-900"
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="h-6 w-6"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
 					>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							class="h-6 w-6"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke="currentColor"
-						>
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M6 18L18 6M6 6l12 12"
-							/>
-						</svg>
-					</button>
-					<div id="modalContent">
-						<!-- Modal content will be dynamically inserted here -->
-					</div>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M6 18L18 6M6 6l12 12"
+						/>
+					</svg>
+				</button>
+				<div id="modalContent">
+					<!-- Modal content will be dynamically inserted here -->
 				</div>
 			</div>
 		</div>

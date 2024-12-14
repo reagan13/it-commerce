@@ -54,7 +54,7 @@ function openQuickView(productId) {
 
 	if (product) {
 		modalContent.innerHTML = `
-                    <div class="flex">
+                    <div class="flex border border-red-500">
                         <img 
                             src="${product.image}" 
                             alt="${product.name}" 
@@ -485,7 +485,11 @@ function renderProducts(filteredProducts = products) {
 			(product) => `
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">
                     <img 
-                        src="${product.image}" 
+                       src="${
+													product.image
+														? product.image
+														: "/PICTURES/no-image.jpg"
+												}"
                         alt="${product.name}" 
                         class="w-full h-48 object-cover"
                     >
