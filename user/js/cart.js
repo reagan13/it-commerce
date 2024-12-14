@@ -541,28 +541,120 @@ class CartManager {
 	}
 	async proceedToCheckout() {
 		try {
-			const response = await fetch(
-				`${this.apiBaseUrl}/checkout/${this.userId}`,
-				{
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-				}
+			// Fetch current cart items
+			const cartResponse = await fetch(
+				`${this.apiBaseUrl}/cart/${this.userId}`
 			);
+			if (!cartResponse.ok) {
+				throw new Error("Failed to fetch cart items");
+			}
+			const cartData = await cartResponse.json();
 
-			if (!response.ok) {
-				const errorBody = await response.text();
-				console.error("Error during checkout:", errorBody);
-				throw new Error(`HTTP error! status: ${response.status}`);
+			// Validate cart
+			if (cartData.cartItems.length === 0) {
+				this.showErrorMessage("Your cart is empty");
+				return;
 			}
 
-			const result = await response.json();
-			// Handle successful checkout (e.g., redirect to a confirmation page)
-			window.location.href = `/checkout-confirmation.html?orderId=${result.orderId}`;
+			// Prepare order data
+			const orderData = {
+				userId: this.userId,
+				items: cartData.cartItems.map((item) => ({
+					id: item.product_id,
+					name: item.name,
+					quantity: item.quantity,
+					price: item.price,
+				})),
+				totalAmount: cartData.totalValue,
+			};
+
+			// Place order
+			const orderResponse = await fetch(`${this.apiBaseUrl}/orders/place`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(orderData),
+			});
+
+			if (!orderResponse.ok) {
+				const errorData = await orderResponse.json();
+				throw new Error(errorData.error || "Order placement failed");
+			}
+
+			const orderResult = await orderResponse.json();
+
+			// Show success message and redirect
+			this.showSuccessMessage("Order placed successfully!");
+
+			// Redirect to order confirmation page
+			setTimeout(() => {
+				window.location.href = `/order-confirmation.html?orderId=${orderResult.orderId}`;
+			}, 2000);
 		} catch (error) {
-			console.error("Error proceeding to checkout:", error);
+			console.error("Checkout Error:", error);
+			this.showErrorMessage(error.message);
 		}
+	}
+
+	showSuccessMessage(message) {
+		const messageContainer = document.createElement("div");
+		messageContainer.classList.add(
+			"fixed",
+			"top-4",
+			"left-1/2",
+			"transform",
+			"-translate-x-1/2",
+			"bg-green-500",
+			"text-white",
+			"px-6",
+			"py-4",
+			"rounded-lg",
+			"shadow-lg",
+			"z-50",
+			"transition-all",
+			"duration-300"
+		);
+		messageContainer.textContent = message;
+		document.body.appendChild(messageContainer);
+
+		// Animate and remove
+		setTimeout(() => {
+			messageContainer.classList.add("opacity-0");
+			setTimeout(() => {
+				document.body.removeChild(messageContainer);
+			}, 300);
+		}, 2000);
+	}
+
+	showErrorMessage(message) {
+		const messageContainer = document.createElement("div");
+		messageContainer.classList.add(
+			"fixed",
+			"top-4",
+			"left-1/2",
+			"transform",
+			"-translate-x-1/2",
+			"bg-red-500",
+			"text-white",
+			"px-6",
+			"py-4",
+			"rounded-lg",
+			"shadow-lg",
+			"z-50",
+			"transition-all",
+			"duration-300"
+		);
+		messageContainer.textContent = message;
+		document.body.appendChild(messageContainer);
+
+		// Animate and remove
+		setTimeout(() => {
+			messageContainer.classList.add("opacity-0");
+			setTimeout(() => {
+				document.body.removeChild(messageContainer);
+			}, 300);
+		}, 2000);
 	}
 	createCartItemElement(item) {
 		const price = Number(item.price || 0);
@@ -775,6 +867,13 @@ class CartManager {
 
 // Initialize cart manager
 document.addEventListener("DOMContentLoaded", () => {
+	const checkoutButton = document.querySelector("button");
 	const cartManager = new CartManager();
 	cartManager.renderCart();
+	if (checkoutButton) {
+		checkoutButton.addEventListener("click", (e) => {
+			e.preventDefault();
+			cartManager.proceedToCheckout();
+		});
+	}
 });
