@@ -153,7 +153,7 @@ class CartManager {
 			)
 			.join("");
 
-		itemElement.innerHTML = `s
+		itemElement.innerHTML = `
         <img 
             src="${imageUrl}" 
             alt="${name}" 
