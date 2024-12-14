@@ -474,7 +474,6 @@ function openQuickView(productId) {
 	}
 }
 
-// Also modify the product grid rendering to include Add to Cart
 function renderProducts(filteredProducts = products) {
 	if (!productsGrid) {
 		console.error("Products grid element not found");
@@ -507,10 +506,10 @@ function renderProducts(filteredProducts = products) {
                                     Quick View
                                 </button>
                                 <button 
-                                    onclick="addToCart(${product.id})" 
+                                    onclick="buyNow(${product.id})" 
                                     class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
                                 >
-                                    Add to Cart
+                                    Buy Now
                                 </button>
                             </div>
                         </div>
@@ -521,6 +520,139 @@ function renderProducts(filteredProducts = products) {
 		.join("");
 }
 
+async function buyNow(productId) {
+	// Find the product
+	const product = products.find((p) => p.id === productId);
+	if (!product) {
+		alert("Product not found");
+		return;
+	}
+
+	// Create confirmation modal
+	const confirmationModal = document.createElement("div");
+	confirmationModal.innerHTML = `
+        <div id="confirmationOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
+            <div class="bg-white p-6 rounded-lg shadow-xl max-w-md w-full">
+                <h2 class="text-2xl font-bold mb-4">Confirm Purchase</h2>
+                <div class="flex items-center mb-4">
+                    <img 
+                        src="${product.image}" 
+                        alt="${product.name}" 
+                        class="w-24 h-24 object-cover rounded-md mr-4"
+                    >
+                    <div>
+                        <h3 class="text-lg font-semibold">${product.name}</h3>
+                        <p class="text-gray-600">Price: $${parseFloat(
+													product.price
+												).toFixed(2)}</p>
+                    </div>
+                </div>
+                <p class="mb-4 text-gray-700">Are you sure you want to purchase this item?</p>
+                <div class="flex justify-between">
+                    <button id="cancelPurchase" class="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300">
+                        Cancel
+                    </button>
+                    <button id="confirmPurchase" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                        Confirm Purchase
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+
+	// Append modal to body
+	document.body.appendChild(confirmationModal);
+
+	// Get modal elements
+	const overlay = document.getElementById("confirmationOverlay");
+	const cancelButton = document.getElementById("cancelPurchase");
+	const confirmButton = document.getElementById("confirmPurchase");
+
+	// Create a promise to handle user's choice
+	const userChoice = new Promise((resolve, reject) => {
+		// Cancel button handler
+		cancelButton.addEventListener("click", () => {
+			overlay.remove();
+			resolve(false);
+		});
+
+		// Confirm button handler
+		confirmButton.addEventListener("click", async () => {
+			// Disable confirm button to prevent multiple clicks
+			confirmButton.disabled = true;
+			confirmButton.textContent = "Processing...";
+
+			try {
+				// Get user ID from localStorage
+				const userId = localStorage.getItem("userId");
+				if (!userId) {
+					throw new Error("User not logged in");
+				}
+
+				// Prepare order data
+				const orderData = {
+					userId: parseInt(userId),
+					productId: product.id,
+					quantity: 1, // Default to 1, can be modified if you want to support quantity selection
+				};
+
+				// Send order to backend
+				const response = await fetch("http://localhost:3000/api/single-order", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(orderData),
+				});
+
+				// Check response
+				if (!response.ok) {
+					const errorText = await response.text();
+					throw new Error(
+						`Order creation failed: ${response.status} ${errorText}`
+					);
+				}
+
+				// Process successful order
+				const orderConfirmation = await response.json();
+				console.log("Order created successfully:", orderConfirmation);
+
+				// Remove overlay
+				overlay.remove();
+
+				// Redirect to order confirmation page
+				window.location.href = `order-confirmation.html?orderId=${orderConfirmation.id}`;
+
+				resolve(true);
+			} catch (error) {
+				console.error("Buy Now Error:", error);
+
+				// Show error in modal
+				const errorDiv = document.createElement("div");
+				errorDiv.className = "text-red-500 mt-4 text-center";
+				errorDiv.textContent = `Error: ${error.message}`;
+				overlay.querySelector(".bg-white").appendChild(errorDiv);
+
+				// Re-enable confirm button
+				confirmButton.disabled = false;
+				confirmButton.textContent = "Confirm Purchase";
+
+				resolve(false);
+			}
+		});
+
+		// Allow closing modal by clicking outside
+		overlay.addEventListener("click", (e) => {
+			if (e.target === overlay) {
+				overlay.remove();
+				resolve(false);
+			}
+		});
+	});
+
+	// Wait for user's choice
+	return userChoice;
+}
 // Initialize the application
 function init() {
 	fetchProducts()

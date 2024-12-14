@@ -906,3 +906,126 @@ app.get("/api/orders", (req, res) => {
 		});
 	});
 });
+
+// Single Product Direct Purchase Endpoint
+app.post("/api/single-order", (req, res) => {
+	const { userId, productId, quantity } = req.body;
+
+	// Validate input
+	if (!userId || !productId || !quantity) {
+		return res.status(400).json({
+			error: "Invalid order data",
+			details: "User ID, Product ID, and Quantity are required",
+		});
+	}
+
+	// Start a database transaction
+	connection.beginTransaction((transactionError) => {
+		if (transactionError) {
+			console.error("Transaction Start Error:", transactionError);
+			return res.status(500).json({
+				error: "Transaction initialization failed",
+				details: transactionError.message,
+			});
+		}
+
+		// First, get the product details
+		const productQuery = `
+            SELECT id, name, price, image 
+            FROM products 
+            WHERE id = ?
+        `;
+
+		connection.query(
+			productQuery,
+			[productId],
+			(productErr, productResults) => {
+				if (productErr || productResults.length === 0) {
+					console.error("Product Fetch Error:", productErr);
+					return connection.rollback(() => {
+						res.status(404).json({
+							error: "Product not found",
+							details: productErr?.message,
+						});
+					});
+				}
+
+				const product = productResults[0];
+				const totalAmount = product.price * quantity;
+
+				// Insert order
+				const orderQuery = `
+                INSERT INTO orders (user_id, order_date, total_amount) 
+                VALUES (?, NOW(), ?)
+            `;
+
+				connection.query(
+					orderQuery,
+					[userId, totalAmount],
+					(orderErr, orderResult) => {
+						if (orderErr) {
+							console.error("Order Insert Error:", orderErr);
+							return connection.rollback(() => {
+								res.status(500).json({
+									error: "Failed to create order",
+									details: orderErr.message,
+								});
+							});
+						}
+
+						const orderId = orderResult.insertId;
+
+						// Insert order items
+						const itemQuery = `
+                    INSERT INTO order_items (order_id, product_id, quantity, price) 
+                    VALUES (?, ?, ?, ?)
+                `;
+
+						connection.query(
+							itemQuery,
+							[orderId, productId, quantity, product.price],
+							(itemErr, itemResult) => {
+								if (itemErr) {
+									console.error("Order Item Insert Error:", itemErr);
+									return connection.rollback(() => {
+										res.status(500).json({
+											error: "Failed to add order item",
+											details: itemErr.message,
+										});
+									});
+								}
+
+								// Commit the transaction
+								connection.commit((commitErr) => {
+									if (commitErr) {
+										console.error("Transaction Commit Error:", commitErr);
+										return connection.rollback(() => {
+											res.status(500).json({
+												error: "Transaction commit failed",
+												details: commitErr.message,
+											});
+										});
+									}
+
+									// Successfully created order
+									res.status(201).json({
+										id: `ORD-${orderId}`,
+										userId,
+										productId,
+										quantity,
+										totalAmount,
+										orderDate: new Date().toISOString(),
+										productDetails: {
+											name: product.name,
+											image: product.image,
+										},
+									});
+								});
+							}
+						);
+					}
+				);
+			}
+		);
+	});
+});
