@@ -257,7 +257,7 @@ app.post("/api/cart", (req, res) => {
 // Cart route
 app.get("/api/cart/:userId", (req, res) => {
 	const userId = req.params.userId;
-	console.log("Fetching cart for user", userId);
+	"Fetching cart for user", userId;
 
 	if (!userId) {
 		return res.status(400).json({ error: "User ID is required" });
@@ -366,7 +366,7 @@ app.post("/api/cart/update", (req, res) => {
 // Ensure the route matches exactly
 app.delete("/api/cart/remove", (req, res) => {
 	const { userId, productId } = req.body;
-	console.log("Removing item from cart", userId, productId);
+	"Removing item from cart", userId, productId;
 
 	if (!userId || !productId) {
 		return res
@@ -752,7 +752,7 @@ app.get("/api/orders/:orderId", (req, res) => {
 	const { orderId } = req.params;
 	const { userId } = req.query;
 
-	console.log("Received Order Request:", { orderId, userId });
+	"Received Order Request:", { orderId, userId };
 
 	if (!userId || !orderId) {
 		return res.status(400).json({ error: "User ID and Order ID are required" });
