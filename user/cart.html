@@ -22,31 +22,34 @@
 				Your Shopping Cart
 			</h1>
 
-			<div class="grid gap-8">
+			<div class="grid gap-8 border border-black">
 				<!-- Cart Items -->
-				<div class="md:col-span-2 space-y-6" id="cartItemsContainer">
+				<div
+					class="md:col-span-2 space-y-6 border border-black h-[500px] overflow-y-auto"
+					id="cartItemsContainer"
+				>
 					<!-- Cart items will be dynamically added here -->
 				</div>
 
 				<!-- Order Summary -->
 				<div
 					id="orderSummaryContainer"
-					class="bg-white border border-gray-200 rounded-xl p-6 h-fit"
+					class="bg-white border border-gray-200 rounded-xl p-6 h-fit border border-black"
 				>
 					<h3 class="text-2xl font-bold text-blue-600 mb-6">Order Summary</h3>
 
 					<div class="space-y-4 mb-6">
 						<div class="flex justify-between">
 							<span>Subtotal</span>
-							<span id="subtotalDisplay">$0.00</span>
+							<span id="subtotalDisplay">₱ 0.00</span>
 						</div>
 						<div class="flex justify-between">
 							<span>Shipping Fee</span>
-							<span id="taxDisplay">$50.00</span>
+							<span id="taxDisplay">₱ 50.00</span>
 						</div>
 						<div class="flex justify-between font-bold text-blue-600">
 							<span>Total</span>
-							<span id="totalDisplay">$0.00</span>
+							<span id="totalDisplay">₱ 0.00</span>
 						</div>
 					</div>
 

@@ -171,7 +171,7 @@ class CartManager {
         <div class="flex-grow">
             <div class="flex justify-between items-center mb-2">
                 <h3 class="text-lg font-semibold text-gray-800">${name}</h3>
-                <p class="text-gray-600">Price: $${price.toFixed(2)}</p>
+                <p class="text-gray-600">Price: ₱${price.toFixed(2)}</p>
             </div>
             <ul class="mb-2">
                 ${ordersListHTML}
@@ -201,7 +201,7 @@ class CartManager {
                 Total Quantity in Cart: <span class="total-quantity">${totalQuantity}</span>
             </p>
             <p class="font-bold text-blue-600 subtotal-display">
-                Subtotal: $${subtotal.toFixed(2)}
+                Subtotal: ₱${subtotal.toFixed(2)}
             </p>
         </div>
         <button 
@@ -224,17 +224,17 @@ class CartManager {
 			const cartItemCountElement = document.querySelector("#cart-item-count");
 
 			if (subtotalElement) {
-				subtotalElement.textContent = `$${totalValue.toFixed(2)}`;
+				subtotalElement.textContent = `₱${totalValue.toFixed(2)}`;
 			}
 
 			if (taxElement) {
 				const tax = totalValue * 0.1;
-				taxElement.textContent = `$${tax.toFixed(2)}`;
+				taxElement.textContent = `₱${tax.toFixed(2)}`;
 			}
 
 			if (totalElement) {
 				const total = totalValue * 1.1;
-				totalElement.textContent = `$${total.toFixed(2)}`;
+				totalElement.textContent = `₱${total.toFixed(2)}`;
 			}
 
 			if (cartItemCountElement) {
@@ -701,7 +701,7 @@ class CartManager {
         <div class="flex-grow">
             <div class="flex justify-between items-center mb-2">
                 <h3 class="text-lg font-semibold text-gray-800">${name}</h3>
-                <p class="text-gray-600">Price: $${price.toFixed(2)}</p>
+                <p class="text-gray-600">Price: ₱${price.toFixed(2)}</p>
             </div>
             <div class="flex items-center space-x-2 mb-2">
                 <button 
@@ -729,7 +729,7 @@ class CartManager {
                 Total Quantity in Cart: <span class="total-quantity">${totalQuantity}</span>
             </p>
             <p class="font-bold text-blue-600 subtotal-display">
-                Subtotal: $${subtotal.toFixed(2)}
+                Subtotal: ₱${subtotal.toFixed(2)}
             </p>
         </div>
         <button 
@@ -844,14 +844,14 @@ class CartManager {
 					.closest(".flex-grow")
 					.querySelector('p[class*="text-gray-600"]');
 				const price = parseFloat(
-					priceElement.textContent.replace("Price: $", "")
+					priceElement.textContent.replace("Price: ₱", "")
 				);
 				const subtotalDisplay = input
 					.closest(".flex-grow")
 					.querySelector(".subtotal-display");
 
 				const newSubtotal = price * newQuantity;
-				subtotalDisplay.textContent = `Subtotal: $${newSubtotal.toFixed(2)}`;
+				subtotalDisplay.textContent = `Subtotal: ₱${newSubtotal.toFixed(2)}`;
 
 				// Update backend
 				this.updateCartItemQuantity(productId, newQuantity);
