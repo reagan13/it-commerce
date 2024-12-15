@@ -162,57 +162,63 @@ class CartManager {
 			.join("");
 
 		itemElement.innerHTML = `
+    <div class="flex flex-col sm:flex-row items-center w-full">
         <img 
             src="${imageUrl}" 
             alt="${name}" 
-            class="w-24 h-24 object-cover rounded-md mr-4"
+            class="w-24 h-24 object-cover rounded-md mb-4 sm:mb-0 sm:mr-4"
             onerror="this.src='/images/default-image.jpg'"
         >
-        <div class="flex-grow">
-            <div class="flex justify-between items-center mb-2">
-                <h3 class="text-lg font-semibold text-gray-800">${name}</h3>
+        <div class="flex-grow w-full">
+            <div class="flex flex-col sm:flex-row justify-between items-center mb-2">
+                <h3 class="text-lg font-semibold text-gray-800 mb-2 sm:mb-0">${name}</h3>
                 <p class="text-gray-600">Price: ₱${price.toFixed(2)}</p>
             </div>
-            <ul class="mb-2">
-                ${ordersListHTML}
-            </ul>
-            <div class="flex items-center space-x-2 mb-2">
-                <button 
-                    class="decrease-quantity bg-gray-200 text-gray-700 px-2 py-1 rounded-md hover:bg-gray-300 transition-colors" 
-                    data-product-id="${productId}"
-                >
-                    -
-                </button>
-                <input 
-                    type="text" 
-                    value="${totalQuantity}" 
-                    readonly 
-                    class="w-16 text-center border border-gray-300 rounded-md py-1 quantity-input bg-gray-100 cursor-not-allowed"
-                    data-product-id="${productId}"
-                >
-                <button 
-                    class="increase-quantity bg-gray-200 text-gray-700 px-2 py-1 rounded-md hover:bg-gray-300 transition-colors" 
-                    data-product-id="${productId}"
-                >
-                    +
-                </button>
+            
+            <div class="flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                <div class="flex items-center space-x-2">
+                    <button 
+                        class="decrease-quantity bg-gray-200 text-gray-700 px-2 py-1 rounded-md hover:bg-gray-300 transition-colors" 
+                        data-product-id="${productId}"
+                    >
+                        -
+                    </button>
+                    <input 
+                        type="text" 
+                        value="${totalQuantity}" 
+                        readonly 
+                        class="w-16 text-center border border-gray-300 rounded-md py-1 quantity-input bg-gray-100 cursor-not-allowed"
+                        data-product-id="${productId}"
+                    >
+                    <button 
+                        class="increase-quantity bg-gray-200 text-gray-700 px-2 py-1 rounded-md hover:bg-gray-300 transition-colors" 
+                        data-product-id="${productId}"
+                    >
+                        +
+                    </button>
+                </div>
+                
+                <div class="flex flex-col sm:flex-row items-center space-y-1 sm:space-y-0 sm:space-x-4">
+                    <p class="text-sm text-gray-600">
+                        Total Quantity: <span class="total-quantity">${totalQuantity}</span>
+                    </p>
+                    <p class="font-bold text-blue-600 subtotal-display">
+                        Subtotal: ₱${subtotal.toFixed(2)}
+                    </p>
+                </div>
             </div>
-            <p class="text-sm text-gray-600 mb-2">
-                Total Quantity in Cart: <span class="total-quantity">${totalQuantity}</span>
-            </p>
-            <p class="font-bold text-blue-600 subtotal-display">
-                Subtotal: ₱${subtotal.toFixed(2)}
-            </p>
         </div>
+        
         <button 
-            class="remove-item text-red-500 hover:text-red-700 ml-4"
+            class="remove-item text-red-500 hover:text-red-700 mt-2 sm:mt-0 sm:ml-4"
             data-product-id="${productId}"
         >
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
             </svg>
         </button>
-    `;
+    </div>
+`;
 
 		return itemElement;
 	}
@@ -293,12 +299,15 @@ class CartManager {
 					}
 				);
 				if (!response.ok) {
+					alert("Failed to remove item from cart");
 					throw new Error("Failed to remove item from cart");
 				}
 
 				const data = await response.json();
+				alert("Item removed from cart:", data.message);
 				console.log("Item removed from cart:", data.message);
 			} catch (error) {
+				alert("Failed to remove item from cart");
 				console.error("Error removing item from cart:", error);
 			}
 		}
@@ -327,22 +336,21 @@ class CartManager {
 				);
 
 				if (!response.ok) {
+					alert("Failed to remove item from cart");
 					throw new Error("Failed to remove item from cart");
 				}
 
 				const data = await response.json();
 				console.log("Item removed from cart:", data.message);
-
+				alert("Item removed from cart");
 				// Custom success alert
-				this.showSuccessAlert("Item removed from cart successfully!");
+				// this.showSuccessAlert("Item removed from cart successfully!");
 
-				// Reload the page after a short delay to show the alert
-				setTimeout(() => {
-					window.location.reload();
-				}, 1500); // 1.5 seconds delay to show the alert
+				window.location.reload();
 			} catch (error) {
+				alert("Failed to remove item from cart");
 				console.error("Error removing item from cart:", error);
-				this.showErrorAlert("Failed to remove item from cart");
+				// this.showErrorAlert("Failed to remove item from cart");
 			}
 		}
 	}
@@ -560,7 +568,8 @@ class CartManager {
 
 			// Validate cart
 			if (cartData.cartItems.length === 0) {
-				this.showErrorMessage("Your cart is empty");
+				alert("Your cart is empty");
+				// this.showErrorMessage("Your cart is empty");
 				return;
 			}
 
@@ -587,21 +596,21 @@ class CartManager {
 
 			if (!orderResponse.ok) {
 				const errorData = await orderResponse.json();
+				alert("Order placement failed");
 				throw new Error(errorData.error || "Order placement failed");
 			}
 
 			const orderResult = await orderResponse.json();
 
+			alert("Order placed successfully!");
 			// Show success message and redirect
-			this.showSuccessMessage("Order placed successfully!");
+			// this.showSuccessMessage("Order placed successfully!");
 
-			// Redirect to order confirmation page
-			setTimeout(() => {
-				window.location.href = `./order-confirmation.html?orderId=${orderResult.orderId}`;
-			}, 2000);
+			window.location.href = `./order-confirmation.html?orderId=${orderResult.orderId}`;
 		} catch (error) {
 			console.error("Checkout Error:", error);
-			this.showErrorMessage(error.message);
+			alert("Failed to proceed to checkout");
+			// this.showErrorMessage(error.message);
 		}
 	}
 
