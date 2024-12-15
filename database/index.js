@@ -1100,3 +1100,150 @@ app.post("/api/products/add", (req, res) => {
 		});
 	}
 });
+
+// GET all products
+app.get("/api/products", (req, res) => {
+	const query = "SELECT * FROM products";
+
+	connection.query(query, (err, results) => {
+		if (err) {
+			console.error("Error fetching products:", err);
+			return res.status(500).json({
+				error: "Failed to fetch products",
+				details: err.message,
+			});
+		}
+
+		// Parse specifications if they're stored as JSON
+		const processedResults = results.map((product) => ({
+			...product,
+			specifications: product.specifications
+				? JSON.parse(product.specifications)
+				: null,
+		}));
+
+		res.json(processedResults);
+	});
+});
+
+// DELETE product route
+app.delete("/api/products/delete/:id", (req, res) => {
+	const productId = req.params.id;
+
+	const query = "DELETE FROM products WHERE id = ?";
+
+	connection.query(query, [productId], (err, result) => {
+		if (err) {
+			console.error("Error deleting product:", err);
+			return res.status(500).json({
+				error: "Failed to delete product",
+				details: err.message,
+			});
+		}
+
+		if (result.affectedRows === 0) {
+			return res.status(404).json({ error: "Product not found" });
+		}
+
+		res.json({
+			message: "Product deleted successfully",
+			productId: productId,
+		});
+	});
+});
+
+// GET single product by ID
+app.get("/api/products/:id", (req, res) => {
+	const productId = req.params.id;
+
+	const query = "SELECT * FROM products WHERE id = ?";
+
+	connection.query(query, [productId], (err, results) => {
+		if (err) {
+			console.error("Error fetching product:", err);
+			return res.status(500).json({
+				error: "Failed to fetch product",
+				details: err.message,
+			});
+		}
+
+		if (results.length === 0) {
+			return res.status(404).json({ error: "Product not found" });
+		}
+
+		// Process the product (parse specifications if needed)
+		const product = results[0];
+		if (product.specifications) {
+			try {
+				product.specifications = JSON.parse(product.specifications);
+			} catch (parseError) {
+				console.error("Failed to parse specifications:", parseError);
+				product.specifications = null;
+			}
+		}
+
+		res.json(product);
+	});
+});
+
+// UPDATE product route
+app.put("/api/products/update/:id", (req, res) => {
+	const productId = req.params.id;
+	const {
+		name,
+		category,
+		description,
+		fullDescription,
+		price,
+		imagePath,
+		specifications,
+	} = req.body;
+
+	// Prepare specifications
+	const safeSpecifications = specifications
+		? JSON.stringify(specifications)
+		: null;
+
+	const query = `
+        UPDATE products 
+        SET 
+            name = ?, 
+            category = ?, 
+            description = ?, 
+            fullDescription = ?, 
+            price = ?, 
+            image = ?, 
+            specs = ?
+        WHERE id = ?
+    `;
+
+	const values = [
+		name,
+		category,
+		description,
+		fullDescription,
+		price,
+		imagePath,
+		safeSpecifications,
+		productId,
+	];
+
+	connection.query(query, values, (err, result) => {
+		if (err) {
+			console.error("Error updating product:", err);
+			return res.status(500).json({
+				error: "Failed to update product",
+				details: err.message,
+			});
+		}
+
+		if (result.affectedRows === 0) {
+			return res.status(404).json({ error: "Product not found" });
+		}
+
+		res.json({
+			message: "Product updated successfully",
+			productId: productId,
+		});
+	});
+});
