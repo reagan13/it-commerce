@@ -10,7 +10,12 @@ require("dotenv").config(); // Load environment variables from .env file
 app.use(express.json()); // Add this to parse JSON
 
 const corsOptions = {
-	origin: ["http://localhost:3000", "https://backend-itservices.onrender.com"], // Trusted origins
+	origin: [
+		"http://localhost:3000",
+		"https://it-services-nkvo.onrender.com",
+		"https://backend-itservices.onrender.com",
+		"http://127.0.0.1:5500",
+	], // Trusted origins
 	methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
 	allowedHeaders: ["Content-Type", "Authorization"],
 	credentials: true,

@@ -53,7 +53,7 @@ class CartManager {
 
 			if (cartItems.length === 0) {
 				cartContainer.innerHTML = `
-                    <div class="text-center text-gray-500 py-10">
+                    <div class="text-center text-gray-500 py-10 border border-black">
                         <p class="text-xl">Your cart is empty</p>
                         <a href="../products.html" class="text-blue-600 hover:underline mt-4 inline-block">
                             Continue Shopping
@@ -61,6 +61,14 @@ class CartManager {
                     </div>
                 `;
 				this.updateTotals(0, 0);
+
+				// Optional: You can explicitly hide the order summary element
+				const orderSummaryContainer = document.getElementById(
+					"orderSummaryContainer"
+				);
+				if (orderSummaryContainer) {
+					orderSummaryContainer.classList.add("hidden");
+				}
 				return;
 			}
 

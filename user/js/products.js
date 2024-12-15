@@ -84,9 +84,9 @@ function openQuickView(productId) {
                             
                             <div class="flex justify-between items-center mt-6">
                                 <span class="text-2xl font-bold text-blue-600">
-                                    $${parseFloat(product.price).toFixed(2)}
+                                    ₱${parseFloat(product.price).toFixed(2)}
                                 </span>
-                                <button class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600">
+                                <button class="bg-green-500 text-white px-6 py-2 rounded hover:bg-blue-600">
                                     Add to Cart
                                 </button>
                             </div>
@@ -420,35 +420,23 @@ function openQuickView(productId) {
 
 	if (product) {
 		modalContent.innerHTML = `
-            <div class="flex">
+            <div class="flex flex-col md:flex-row h-full items-stretch">
                 <img 
                     src="${product.image}" 
                     alt="${product.name}" 
-                    class="w-1/2 object-cover rounded-lg"
+                    class="w-full md:w-1/2 h-auto object-cover rounded-lg border border-black"
                 >
-                <div class="pl-6 w-1/2">
+                <div class="pl-4 md:pl-6 w-full md:w-1/2">
                     <h2 class="text-2xl font-bold mb-4">${product.name}</h2>
                     <p class="text-gray-600 mb-4">${product.fullDescription}</p>
                     
-                    <div class="mb-4">
-                        <h3 class="font-semibold text-lg mb-2">Specifications:</h3>
-                        <ul class="space-y-1">
-                            ${Object.entries(product.specs || {})
-															.map(
-																([key, value]) =>
-																	`<li class="text-gray-700">
-                                            <span class="font-medium">${key}:</span> ${value}
-                                        </li>`
-															)
-															.join("")}
-                        </ul>
-                    </div>
+                   
                     
-                    <div class="flex justify-between items-center mt-6">
+                    <div class="flex flex-col md:flex-row justify-between items-center mt-6">
                         <span class="text-2xl font-bold text-blue-600">
-                            $${parseFloat(product.price).toFixed(2)}
+                            ₱${parseFloat(product.price).toFixed(2)}
                         </span>
-                        <div class="flex items-center space-x-4">
+                        <div class="flex items-center space-x-2 mt-2 md:mt-0">
                             <input 
                                 type="number" 
                                 min="1" 
@@ -460,7 +448,7 @@ function openQuickView(productId) {
                                 onclick="addToCart(${
 																	product.id
 																}, document.getElementById('quantityInput').value)" 
-                                class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
+                                class="bg-green-500 text-white px-4 py-2 rounded hover:bg-blue-600"
                             >
                                 Add to Cart
                             </button>
@@ -483,7 +471,7 @@ function renderProducts(filteredProducts = products) {
 	productsGrid.innerHTML = filteredProducts
 		.map(
 			(product) => `
-                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="bg-white rounded-lg shadow-md border border-black w-60 h-[350px] flex flex-col">
                     <img 
                        src="${
 													product.image
@@ -491,32 +479,32 @@ function renderProducts(filteredProducts = products) {
 														: "/PICTURES/no-image.jpg"
 												}"
                         alt="${product.name}" 
-                        class="w-full h-48 object-cover"
+                        class="w-full flex-grow object-cover border border-black"
                     >
-                    <div class="p-4">
+                    <div class="p-4 border border-black flex flex-col gap-1 border ">
                         <h3 class="text-lg font-semibold">${product.name}</h3>
-                        <p class="text-gray-600 text-sm">${
+                        <p class="text-gray-600 text-sm line-clamp-2 ">${
 													product.description
 												}</p>
-                        <div class="flex justify-between items-center mt-4">
-                            <span class="text-xl font-bold text-blue-600">$${parseFloat(
-															product.price
-														).toFixed(2)}</span>
-                            <div class="flex space-x-2">
-                                <button 
-                                    onclick="openQuickView(${product.id})" 
-                                    class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                                >
-                                    Quick View
-                                </button>
-                                <button 
-                                    onclick="buyNow(${product.id})" 
-                                    class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-                                >
-                                    Buy Now
-                                </button>
-                            </div>
+
+                        <span class="text-xl font-bold text-blue-600 ">₱${parseFloat(
+													product.price
+												).toFixed(2)}</span>
+                        <div class="flex justify-between ">
+                            <button 
+                                onclick="openQuickView(${product.id})" 
+                                class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                            >
+                                View
+                            </button>
+                            <button 
+                                onclick="buyNow(${product.id})" 
+                                class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+                            >
+                                Buy Now
+                            </button>
                         </div>
+                        
                     </div>
                 </div>
             `

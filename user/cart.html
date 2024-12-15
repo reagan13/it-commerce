@@ -15,21 +15,24 @@
 		<div id="navigationBar"></div>
 
 		<!-- Cart Section -->
-		<div class="container mx-auto px-6 pt-24">
+		<div class="px-6 pt-10 border border-black">
 			<h1
 				class="text-4xl font-bold text-blue-600 mb-8 text-center lg:text-left"
 			>
 				Your Shopping Cart
 			</h1>
 
-			<div class="grid md:grid-cols-3 gap-8">
+			<div class="grid gap-8">
 				<!-- Cart Items -->
 				<div class="md:col-span-2 space-y-6" id="cartItemsContainer">
 					<!-- Cart items will be dynamically added here -->
 				</div>
 
 				<!-- Order Summary -->
-				<div class="bg-white border border-gray-200 rounded-xl p-6 h-fit">
+				<div
+					id="orderSummaryContainer"
+					class="bg-white border border-gray-200 rounded-xl p-6 h-fit"
+				>
 					<h3 class="text-2xl font-bold text-blue-600 mb-6">Order Summary</h3>
 
 					<div class="space-y-4 mb-6">
