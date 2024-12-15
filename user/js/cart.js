@@ -55,7 +55,7 @@ class CartManager {
 				cartContainer.innerHTML = `
                     <div class="text-center text-gray-500 py-10 border border-black">
                         <p class="text-xl">Your cart is empty</p>
-                        <a href="../products.html" class="text-blue-600 hover:underline mt-4 inline-block">
+                        <a href="products.html" class="text-blue-600 hover:underline mt-4 inline-block">
                             Continue Shopping
                         </a>
                     </div>
@@ -134,9 +134,9 @@ class CartManager {
 		const totalQuantity = Number(groupedItem.totalQuantity || 0);
 		const productId = groupedItem.product_id || "unknown";
 		const name = groupedItem.name || "Unnamed Product";
-		const imageUrl = groupedItem.image_url
-			? `http://localhost:3000${groupedItem.image_url}`
-			: "/public/products/card4-bg.png";
+
+		const FALLBACK_IMAGE = "/PICTURES/no-image.jpg";
+		const imageUrl = groupedItem.image || FALLBACK_IMAGE;
 
 		const itemElement = document.createElement("div");
 		itemElement.classList.add(
@@ -167,7 +167,11 @@ class CartManager {
             src="${imageUrl}" 
             alt="${name}" 
             class="w-24 h-24 object-cover rounded-md mb-4 sm:mb-0 sm:mr-4"
-            onerror="this.src='/images/default-image.jpg'"
+            onerror="
+                                console.error('Image failed to load:', this.src); 
+                                this.onerror=null; 
+                                this.src='${FALLBACK_IMAGE}'
+                            "
         >
         <div class="flex-grow w-full">
             <div class="flex flex-col sm:flex-row justify-between items-center mb-2">
@@ -677,10 +681,8 @@ class CartManager {
 		const price = Number(item.price || 0);
 		const productId = item.product_id || "unknown";
 		const name = item.name || "Unnamed Product";
-		const imageUrl = item.image_url
-			? `http://localhost:3000${item.image_url}`
-			: "/public/products/card4-bg.png";
-
+		const FALLBACK_IMAGE = "/PICTURES/no-image.jpg";
+		const imageUrl = item.image ? `${item.image}` : FALLBACK_IMAGE;
 		// Calculate total quantity for this product
 		const totalQuantity = this.cartItems
 			.filter((cartItem) => cartItem.product_id === productId)
@@ -705,7 +707,12 @@ class CartManager {
             src="${imageUrl}" 
             alt="${name}" 
             class="w-24 h-24 object-cover rounded-md mr-4"
-            onerror="this.src='/images/default-image.jpg'"
+         
+			 onerror="
+                                console.error('Image failed to load:', this.src); 
+                                this.onerror=null; 
+                                this.src='${FALLBACK_IMAGE}'
+                            "
         >
         <div class="flex-grow">
             <div class="flex justify-between items-center mb-2">

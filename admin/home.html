@@ -225,7 +225,7 @@
 							name: product.name || "Unnamed Product",
 							category: product.category || "Uncategorized",
 							price: parseFloat(product.price || 0).toFixed(2),
-							imagePath: product.image_path || "product-placeholder.jpg",
+							imagePath: product.image || "product-placeholder.jpg",
 							description: product.description || "No description available",
 						};
 
@@ -683,7 +683,7 @@
                         <input 
                             type="text" 
                             name="imagePath"
-                            value="${product.image_path}"
+                            value="${product.image}"
                             class="w-full border-b border-gray-300 px-2 py-1 focus:outline-none focus:border-blue-500"
                             placeholder="Image URL or path"
                             required

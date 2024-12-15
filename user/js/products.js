@@ -9,94 +9,7 @@ const applyFiltersBtn = document.getElementById("applyFiltersBtn");
 // Global variable to store products
 let products = [];
 
-// Render Products Function
-function renderProducts(filteredProducts = products) {
-	if (!productsGrid) {
-		console.error("Products grid element not found");
-		return;
-	}
-
-	productsGrid.innerHTML = filteredProducts
-		.map(
-			(product) => `
-                <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    <img 
-                        src="${product.image}" 
-                        alt="${product.name}" 
-                        class="w-full h-48 object-cover"
-                    >
-                    <div class="p-4">
-                        <h3 class="text-lg font-semibold">${product.name}</h3>
-                        <p class="text-gray-600 text-sm">${
-													product.description
-												}</p>
-                        <div class="flex justify-between items-center mt-4">
-                            <span class="text-xl font-bold text-blue-600">$${parseFloat(
-															product.price
-														).toFixed(2)}</span>
-                            <button 
-                                onclick="openQuickView(${product.id})" 
-                                class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                            >
-                                Quick View
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `
-		)
-		.join("");
-}
-
 // Open Quick View Modal
-function openQuickView(productId) {
-	const product = products.find((p) => p.id === productId);
-
-	if (product) {
-		modalContent.innerHTML = `
-                    <div class="flex border border-red-500">
-                        <img 
-                            src="${product.image}" 
-                            alt="${product.name}" 
-                            class="w-1/2 object-cover rounded-lg"
-                        >
-                        <div class="pl-6 w-1/2">
-                            <h2 class="text-2xl font-bold mb-4">${
-															product.name
-														}</h2>
-                            <p class="text-gray-600 mb-4">${
-															product.fullDescription
-														}</p>
-                            
-                            <div class="mb-4">
-                                <h3 class="font-semibold text-lg mb-2">Specifications:</h3>
-                                <ul class="space-y-1">
-                                    ${Object.entries(product.specs || {})
-																			.map(
-																				([key, value]) =>
-																					`<li class="text-gray-700">
-                                            <span class="font-medium">${key}:</span> ${value}
-                                        </li>`
-																			)
-																			.join("")}
-                                </ul>
-                            </div>
-                            
-                            <div class="flex justify-between items-center mt-6">
-                                <span class="text-2xl font-bold text-blue-600">
-                                    ₱${parseFloat(product.price).toFixed(2)}
-                                </span>
-                                <button class="bg-green-500 text-white px-6 py-2 rounded hover:bg-blue-600">
-                                    Add to Cart
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-
-		quickViewModal.classList.remove("hidden");
-	}
-}
 
 // Close Quick View Modal
 function closeQuickView() {
@@ -421,14 +334,20 @@ function showCartMessage(message, isSuccess) {
 // Modify the Quick View Modal rendering to include Add to Cart functionality
 function openQuickView(productId) {
 	const product = products.find((p) => p.id === productId);
-
+	const FALLBACK_IMAGE = "/PICTURES/no-image.jpg";
+	const imageUrl = product.image || FALLBACK_IMAGE;
 	if (product) {
 		modalContent.innerHTML = `
             <div class="flex flex-col md:flex-row h-full items-stretch">
                 <img 
-                    src="${product.image}" 
+                    src="${imageUrl}" 
                     alt="${product.name}" 
                     class="w-full md:w-1/2 h-auto object-cover rounded-lg border border-black"
+					 onerror="
+                                console.error('Image failed to load:', this.src); 
+                                this.onerror=null; 
+                                this.src='${FALLBACK_IMAGE}'
+                            "
                 >
                 <div class="pl-4 md:pl-6 w-full md:w-1/2">
                     <h2 class="text-2xl font-bold mb-4">${product.name}</h2>
@@ -471,21 +390,25 @@ function renderProducts(filteredProducts = products) {
 		console.error("Products grid element not found");
 		return;
 	}
+	const FALLBACK_IMAGE = "/PICTURES/no-image.jpg";
 
 	productsGrid.innerHTML = filteredProducts
-		.map(
-			(product) => `
-                <div class="bg-white rounded-lg shadow-md border border-black w-60 h-[350px] flex flex-col">
-                    <img 
-                       src="${
-													product.image
-														? product.image
-														: "/PICTURES/no-image.jpg"
-												}"
+		.map((product) => {
+			const imageUrl = product.image ? `${product.image}` : FALLBACK_IMAGE;
+			return `
+
+				  <div class="bg-white rounded-lg shadow-md border border-black w-60 flex flex-col">
+                     <img 
+                        src="${imageUrl}"
                         alt="${product.name}" 
-                        class="w-full flex-grow object-cover border border-black"
-                    >
-                    <div class="p-4 border border-black flex flex-col gap-1 border ">
+                        class="w-full h-48 object-contain border border-blue-500"
+						 onerror="
+                                console.error('Image failed to load:', this.src); 
+                                this.onerror=null; 
+                                this.src='${FALLBACK_IMAGE}'
+                            "
+                    	>
+                    <div class="p-4 border border-red-500 flex flex-col gap-1  ">
                         <h3 class="text-lg font-semibold">${product.name}</h3>
                         <p class="text-gray-600 text-sm line-clamp-2 ">${
 													product.description
@@ -510,9 +433,8 @@ function renderProducts(filteredProducts = products) {
                         </div>
                         
                     </div>
-                </div>
-            `
-		)
+                </div>`;
+		})
 		.join("");
 }
 
