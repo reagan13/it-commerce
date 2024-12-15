@@ -1029,3 +1029,74 @@ app.post("/api/single-order", (req, res) => {
 		);
 	});
 });
+
+//  add product
+// Add Product Endpoint
+app.post("/api/products/add", (req, res) => {
+	try {
+		const {
+			name,
+			category,
+			description,
+			fullDescription,
+			price,
+			imagePath,
+			specifications,
+		} = req.body;
+
+		// Validate required fields
+		if (!name || !category || !price) {
+			return res.status(400).json({
+				error:
+					"Missing required fields: name, category, and price are required.",
+			});
+		}
+
+		// Ensure specifications is stored as JSON or NULL
+		const safeSpecifications = specifications
+			? JSON.stringify(
+					specifications.split("\n").filter((spec) => spec.trim() !== "")
+			  )
+			: null;
+
+		// Insert query
+		const insertQuery = `
+			INSERT INTO products 
+			(name, category, description, fullDescription, price, image, specs) 
+			VALUES (?, ?, ?, ?, ?, ?, ?)
+		`;
+
+		const values = [
+			name,
+			category,
+			description || null,
+			fullDescription || null,
+			price,
+			imagePath || null,
+			safeSpecifications,
+		];
+
+		// Execute the insert query
+		connection.query(insertQuery, values, (err, result) => {
+			if (err) {
+				console.error("Database insertion error:", err);
+				return res.status(500).json({
+					error: "Failed to add product",
+					details: err.message,
+				});
+			}
+
+			// Respond with the newly created product ID
+			res.status(201).json({
+				message: "Product added successfully",
+				productId: result.insertId,
+			});
+		});
+	} catch (error) {
+		console.error("Server error:", error);
+		res.status(500).json({
+			error: "Internal server error",
+			details: error.message,
+		});
+	}
+});
