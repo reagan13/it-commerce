@@ -114,13 +114,16 @@ document.addEventListener("DOMContentLoaded", () => {
 			};
 
 			// Send signup request
-			const response = await fetch("http://localhost:3000/api/signup", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(formData),
-			});
+			const response = await fetch(
+				"https://backend-itservices.onrender.com/api/signup",
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(formData),
+				}
+			);
 
 			const data = await response.json();
 

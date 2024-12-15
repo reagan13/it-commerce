@@ -5,15 +5,15 @@ const PORT = 3000;
 const bcrypt = require("bcryptjs");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+require("dotenv").config(); // Load environment variables from .env file
 
 app.use(express.json()); // Add this to parse JSON
 
-// Completely open CORS configuration
 const corsOptions = {
-	origin: true, // Allow all origins
+	origin: ["http://localhost:3000", "https://backend-itservices.onrender.com"], // Trusted origins
 	methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
 	allowedHeaders: ["Content-Type", "Authorization"],
-	credentials: true, // Important for cookies and sessions
+	credentials: true,
 	optionsSuccessStatus: 200,
 };
 
@@ -26,10 +26,10 @@ app.use(bodyParser.json());
 
 // Create the MySQL connection
 const connection = mysql.createConnection({
-	host: "localhost",
-	user: "root", // Replace with your MySQL username
-	password: "", // Replace with your MySQL password
-	database: "commerece", // Replace with your database name
+	host: process.env.DB_HOST,
+	user: process.env.DB_USER,
+	password: process.env.DB_PASSWORD,
+	database: process.env.DB_NAME,
 });
 
 // Connect to MySQL
