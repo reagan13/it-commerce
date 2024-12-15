@@ -378,14 +378,18 @@ async function addToCart(productId, quantity = 1) {
 		const data = await response.json();
 
 		if (!response.ok) {
+			alert(data.error || "Failed to add product to cart");
 			throw new Error(data.error || "Failed to add product to cart");
 		}
 
 		// Show success message
-		showCartMessage(data.message, true);
+		// showCartMessage(data.message, true);
+		alert("Product added to cart successfully!");
+		location.reload(); // Reload the page to reflect changes
 	} catch (error) {
+		alert("Failed to add product to cart");
 		console.error("Add to Cart Error:", error);
-		showCartMessage(error.message, false);
+		// showCartMessage(error.message, false);
 	}
 }
 
