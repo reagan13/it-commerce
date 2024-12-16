@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 			if (isSuccess) {
 				// Redirect to user home page
-				window.location.href = "../user/home.html";
+				window.location.href = "/user/home.html";
 			}
 		}, 3000);
 	}
@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				email: emailInput.value.trim(),
 				password: passwordInput.value,
 			};
-
+			alert(loginData);
 			// Send login request
 			const response = await fetch("http://localhost:3000/api/signin", {
 				method: "POST",
@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				},
 				body: JSON.stringify(loginData),
 			});
-
+			alert(response);
 			const data = await response.json();
 
 			if (!response.ok) {
