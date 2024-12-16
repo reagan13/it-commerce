@@ -5,24 +5,126 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<title>About Us</title>
 		<link rel="stylesheet" href="design2.css" />
+		<script src="https://cdn.tailwindcss.com"></script>
+		<link
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+			rel="stylesheet"
+		/>
 	</head>
 
 	<body>
 		<div class="content-wrapper">
-			<header class="Header">
-				<nav class="Navigations">
-					<div class="Logo">
-						<img src="PICTURES/Logo.png" alt="Logo" class="logo-img" />
-						<h2><a href="index.html">IT Services</a></h2>
+			<!-- Navigation -->
+			<nav class="sticky w-full top-0 fixed z-50 shadow-sm border bg-[#201e43]">
+				<div
+					class="px-5 sm:mx-auto lg:px-10 py-4 flex items-center justify-between"
+				>
+					<!-- Logo Section (Left) -->
+					<div class="flex items-center space-x-4 shrink-0">
+						<img
+							src="PICTURES/Logo.png"
+							alt="IT Services Logo"
+							class="rounded-full w-12 h-12"
+						/>
+						<a href="index.html" class="text-2xl font-bold text-white"
+							>IT Services</a
+						>
 					</div>
-					<ul class="Header-Links">
-						<li><a href="index.html">Home</a></li>
-						<li><a href="services.html">Services</a></li>
-						<li><a href="contact-us.html">Contact Us</a></li>
-						<li><a href="./auth/sign-in.html" target="_blank">Login</a></li>
-					</ul>
-				</nav>
-			</header>
+
+					<!-- Desktop Navigation (Center) -->
+					<div
+						class="hidden md:flex flex-grow justify-center items-center space-x-6 text-lg"
+					>
+						<a href="index.html" class="text-xl text-white hover:text-blue-300"
+							>Home</a
+						>
+						<a href="about-us.html" class="text-white hover:text-blue-300"
+							>About Us</a
+						>
+						<a href="services.html" class="text-white hover:text-blue-300"
+							>Services</a
+						>
+						<a href="contact-us.html" class="text-white hover:text-blue-300"
+							>Contact Us</a
+						>
+					</div>
+
+					<!-- Action Buttons (Right) -->
+					<div
+						class="hidden md:flex justify-end items-center space-x-4 shrink-0"
+					>
+						<a
+							href="services.html"
+							class="px-4 py-2 bg-white text-[#201e43] rounded-md hover:bg-blue-600 transition duration-300"
+						>
+							Start Now
+						</a>
+					</div>
+
+					<!-- Mobile Menu Toggle -->
+					<div class="md:hidden flex justify-end">
+						<button id="mobileMenuToggle" class="text-2xl text-white">
+							<i class="fas fa-bars"></i>
+						</button>
+					</div>
+				</div>
+			</nav>
+
+			<!-- Mobile Menu -->
+			<div
+				id="mobileMenu"
+				class="fixed top-0 left-0 w-full h-full bg-[#201e43] z-[60] transform -translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto"
+			>
+				<div class="p-4">
+					<div class="flex justify-between items-center mb-6">
+						<div class="flex items-center space-x-4">
+							<img
+								src="PICTURES/Logo.png"
+								alt="IT Services Logo"
+								class="rounded-full size-12"
+							/>
+							<h1 class="text-2xl font-bold text-white">IT Services</h1>
+						</div>
+						<button id="closeMobileMenu" class="text-white text-2xl">
+							<i class="fas fa-times"></i>
+						</button>
+					</div>
+
+					<div class="flex flex-col space-y-4">
+						<a
+							href="index.html"
+							class="text-white text-xl py-2 border-b border-gray-700"
+							>Home</a
+						>
+						<a
+							href="about-us.html"
+							class="text-white text-xl py-2 border-b border-gray-700"
+							>About Us</a
+						>
+						<a
+							href="services.html"
+							class="text-white text-xl py-2 border-b border-gray-700"
+							>Services</a
+						>
+						<a
+							href="contact-us.html"
+							class="text-white text-xl py-2 border-b border-gray-700"
+							>Contact Us</a
+						>
+						<a
+							href="./auth/sign-in.html"
+							class="text-white text-xl py-2 border-b border-gray-700"
+							>Login</a
+						>
+						<a
+							href="services.html"
+							class="text-white text-xl py-2 bg-blue-500 text-center rounded-md"
+						>
+							Start Now
+						</a>
+					</div>
+				</div>
+			</div>
 
 			<section class="about">
 				<img src="PICTURES/About Us.png" alt="About Us" class="aboutus-img" />
@@ -44,49 +146,79 @@
 					</div>
 				</div>
 			</section>
+			<section class="bg-gray-100 py-24">
+				<h1
+					class="text-4xl font-bold text-[#201e43] text-center font-extrabold"
+				>
+					Meet Our Team
+				</h1>
 
-			<section class="team">
-				<section class="team-2">
-					<h1>Meet Our Team</h1>
-				</section>
-				<div class="team-cards">
-					<div class="card">
-						<div class="card-img">
-							<img src="PICTURES/Marielou.jpg" alt="User 1" />
+				<div
+					class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto px-4 pt-24 pb-12"
+				>
+					<div
+						class="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:-translate-y-2 hover:shadow-xl"
+					>
+						<div class="h-72 overflow-hidden">
+							<img
+								src="PICTURES/Marielou.jpg"
+								alt="User 1"
+								class="w-full h-full object-cover"
+							/>
 						</div>
-						<div class="card-info">
-							<h2 class="card-name">"Ate Mars"</h2>
-							<p class="card-role">Marie Lou B. Nugas</p>
-							<p class="card-email">
+						<div class="p-6 text-center">
+							<h2 class="text-3xl font-bold mb-2 text-[#201e43]">"Ate Mars"</h2>
+							<p class="text-xl font-semibold text-gray-700 mb-4">
+								Marie Lou B. Nugas
+							</p>
+							<p class="text-gray-600">
 								Lead IT Consultant. Ready to offer a helping hand and counsel
 								every aspiring IT student feels supported in their abilities.
 							</p>
 						</div>
 					</div>
 
-					<div class="card">
-						<div class="card-img">
-							<img src="PICTURES/Ciela.jpg" alt="User 2" />
+					<div
+						class="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:-translate-y-2 hover:shadow-xl"
+					>
+						<div class="h-72 overflow-hidden">
+							<img
+								src="PICTURES/Ciela.jpg"
+								alt="User 2"
+								class="w-full h-full object-cover"
+							/>
 						</div>
-						<div class="card-info">
-							<h2 class="card-name">"Ate Ciela"</h2>
-							<p class="card-role">Ciela Mae M. Morales</p>
-							<p class="card-email">
-								The team’s go-to person for anything related to finances. Ate
+						<div class="p-6 text-center">
+							<h2 class="text-3xl font-bold mb-2 text-[#201e43]">
+								"Ate Ciela"
+							</h2>
+							<p class="text-xl font-semibold text-gray-700 mb-4">
+								Ciela Mae M. Morales
+							</p>
+							<p class="text-gray-600">
+								The team's go-to person for anything related to finances. Ate
 								Ciela ensures that everyone feels secure about how funds are
 								being managed.
 							</p>
 						</div>
 					</div>
 
-					<div class="card">
-						<div class="card-img">
-							<img src="PICTURES/Mae.jpg" alt="User 3" />
+					<div
+						class="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:-translate-y-2 hover:shadow-xl"
+					>
+						<div class="h-72 overflow-hidden">
+							<img
+								src="PICTURES/Mae.jpg"
+								alt="User 3"
+								class="w-full h-full object-cover"
+							/>
 						</div>
-						<div class="card-info">
-							<h2 class="card-name">"Ate Mae"</h2>
-							<p class="card-role">Mae M. Arnoco</p>
-							<p class="card-email">
+						<div class="p-6 text-center">
+							<h2 class="text-3xl font-bold mb-2 text-[#201e43]">"Ate Mae"</h2>
+							<p class="text-xl font-semibold text-gray-700 mb-4">
+								Mae M. Arnoco
+							</p>
+							<p class="text-gray-600">
 								Business Manager. Ate Mae ensures that every project runs
 								smoothly, leading to satisfied clients and successful outcomes.
 							</p>
@@ -94,99 +226,32 @@
 					</div>
 				</div>
 			</section>
-
-			<footer>
-				<div class="content">
-					<div class="serv-fb">
-						<div class="serv">
-							<button class="button-services" data-text="Awesome">
-								<span class="actual-text">&nbsp;ITServices&nbsp;</span>
-								<span aria-hidden="true" class="hover-text"
-									>&nbsp;ITServices&nbsp;</span
-								>
-							</button>
-						</div>
-					</div>
-
-					<div class="Footer-Boxes">
-						<ul class="Box Footer-Box1">
-							<li class="Footer-Box2">
-								Stay in the loop and sign up for IT Services:
-							</li>
-							<li><input type="text" placeholder="Enter your email" /></li>
-						</ul>
-
-						<ul class="Box">
-							<li class="Footer-Box2">Company</li>
-							<li><a href="#">Home</a></li>
-							<li><a href="about-us.html" target="_blank">About</a></li>
-							<li><a href="services.html" target="_blank">Pricing</a></li>
-							<li><a href="services.html" target="_blank">Services</a></li>
-							<li><a href="about-us.html" target="_blank">Team</a></li>
-						</ul>
-
-						<ul class="Box">
-							<li class="Footer-Box2">Documentation</li>
-							<li><a href="#">Help Centre</a></li>
-							<li><a href="contact-us.html">Contact</a></li>
-							<li><a href="#">FAQ</a></li>
-							<li><a href="#">Privacy Policy</a></li>
-						</ul>
-
-						<ul class="Box">
-							<li class="Footer-Box2">Social</li>
-							<li>
-								<a href="https://www.facebook.com/profile.php?id=61568755081153"
-									>Facebook</a
-								>
-							</li>
-							<li>
-								<a href="https://www.instagram.com/itservices_official/"
-									>Instagram</a
-								>
-							</li>
-							<li>
-								<a
-									href="https://www.youtube.com/@ITServices_official/"
-									target="_blank"
-									>Youtube</a
-								>
-							</li>
-							<li>
-								<a
-									href="https://www.linkedin.com/in/itservicesofficial/"
-									target="_blank"
-									>LinkedIn</a
-								>
-							</li>
-						</ul>
-					</div>
-				</div>
-
-				<div class="bottom-details">
-					<div class="bottom_text">
-						<span class="copyright_text"
-							>&#169; <a href="#">IT Services.</a> All rights reserved
-							2024</span
-						>
-						<span class="policy_terms">
-							<a href="#">Terms & Conditions</a>
-						</span>
-					</div>
-				</div>
-
-				<div class="buttonz-container">
-					<a href="#">
-						<button class="buttonz">
-							<svg class="svgIcon" viewBox="0 0 384 512">
-								<path
-									d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"
-								></path>
-							</svg>
-						</button>
-					</a>
-				</div>
-			</footer>
 		</div>
+		<!-- JavaScript for Mobile Menu Toggle -->
+		<script>
+			// Mobile Menu Toggle
+			document
+				.getElementById("mobileMenuToggle")
+				.addEventListener("click", function () {
+					const mobileMenu = document.getElementById("mobileMenu");
+					mobileMenu.classList.remove("-translate-x-full");
+				});
+
+			// Close Mobile Menu
+			document
+				.getElementById("closeMobileMenu")
+				.addEventListener("click", function () {
+					const mobileMenu = document.getElementById("mobileMenu");
+					mobileMenu.classList.add("-translate-x-full");
+				});
+
+			// Close Mobile Menu when menu items clicked
+			document.querySelectorAll("#mobileMenu a").forEach((item) => {
+				item.addEventListener("click", function () {
+					const mobileMenu = document.getElementById("mobileMenu");
+					mobileMenu.classList.add("-translate-x-full");
+				});
+			});
+		</script>
 	</body>
 </html>
